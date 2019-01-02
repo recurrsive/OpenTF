@@ -2,8 +2,7 @@ package com.k2sw.opentf;
 
 import com.sun.tools.doclets.standard.Standard;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 public class StandardBoard {
@@ -42,6 +41,14 @@ public class StandardBoard {
     }
 
     private TileSlot[][] rows;
+
+    public Set<TileSlot> getAllSlots() {
+        Set<TileSlot> result = new HashSet<>();
+        for (TileSlot[] row : rows) {
+            Collections.addAll(result, row);
+        }
+        return result;
+    }
 
     public StandardBoard() {
         rows = new TileSlot[][]{
