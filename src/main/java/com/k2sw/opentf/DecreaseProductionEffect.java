@@ -2,11 +2,11 @@ package com.k2sw.opentf;
 
 import java.util.Map;
 
-public class IncreaseProductionEffect implements Effect {
+public class DecreaseProductionEffect implements Effect {
     private ResourceType type;
     private int amount;
 
-    public IncreaseProductionEffect(ResourceType type, int amount) {
+    public DecreaseProductionEffect(ResourceType type, int amount) {
         this.type = type;
         this.amount = amount;
     }
@@ -16,6 +16,7 @@ public class IncreaseProductionEffect implements Effect {
 
         production.put(type, production.get(type) + amount);
 
-        return new GameState[]{state.build()};
+        if (production.get(type) < 0) return new GameState[0];
+        else return new GameState[]{state.build()};
     }
 }

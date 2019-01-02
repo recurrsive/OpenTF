@@ -18,6 +18,18 @@ public class PlayerBuilder implements PlayerOrBuilder {
         this.tableau = tableau;
     }
 
+    public PlayerBuilder(Player template){
+        production = template.getProduction();
+        amounts = template.getAmounts();
+        terraformingScore = template.getTerraformingScore();
+        playerID = template.getPlayerID();
+        CardStateBuilder[] results = new CardStateBuilder[template.getTableau().length];
+        for (int i = 0; i < results.length; i++){
+            results[i] = new CardStateBuilder(template.getTableau()[i]);
+        }
+        tableau = results;
+    }
+
     @Override
     public Map<ResourceType, Integer> getProduction() {
         return production;

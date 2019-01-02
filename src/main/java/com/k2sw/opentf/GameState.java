@@ -13,10 +13,12 @@ public class GameState implements GameStateOrBuilder {
     private Map<TileSlot, Tile> placedTiles;
     private Set<TileSlot> unplacedSlots;
 
-    public GameState(int oxygen, int temperature, Player[] players) {
+    public GameState(int oxygen, int temperature, Player[] players, Map<TileSlot, Tile> placedTiles, Set<TileSlot> unplacedSlots) {
         this.oxygen = oxygen;
         this.temperature = temperature;
         this.players = players;
+        this.placedTiles = placedTiles;
+        this.unplacedSlots = unplacedSlots;
     }
 
     @Override
@@ -38,5 +40,13 @@ public class GameState implements GameStateOrBuilder {
 
     public Player[] getPlayers() {
         return players;
+    }
+
+    public Map<TileSlot, Tile> getPlacedTiles() {
+        return placedTiles;
+    }
+
+    public Set<TileSlot> getUnplacedSlots() {
+        return unplacedSlots;
     }
 }

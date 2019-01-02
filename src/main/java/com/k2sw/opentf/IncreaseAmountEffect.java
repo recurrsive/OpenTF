@@ -2,19 +2,19 @@ package com.k2sw.opentf;
 
 import java.util.Map;
 
-public class IncreaseProductionEffect implements Effect {
+public class IncreaseAmountEffect implements Effect {
     private ResourceType type;
     private int amount;
 
-    public IncreaseProductionEffect(ResourceType type, int amount) {
+    public IncreaseAmountEffect(ResourceType type, int amount) {
         this.type = type;
         this.amount = amount;
     }
 
     public GameState[] apply(GameStateBuilder state, PlayerID currentPlayer) {
-        Map<ResourceType, Integer> production = state.getPlayerByID(currentPlayer).getProduction();
+        Map<ResourceType, Integer> amounts = state.getPlayerByID(currentPlayer).getAmounts();
 
-        production.put(type, production.get(type) + amount);
+        amounts.put(type, amounts.get(type) + amount);
 
         return new GameState[]{state.build()};
     }

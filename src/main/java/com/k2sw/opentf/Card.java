@@ -7,14 +7,16 @@ public class Card {
     private CardTag[] tags;
     private Effect playEffect;
     private Effect actionEffect;
+    private Requirement requirement;
 
-    public Card(String name, int cost, CardType type, CardTag[] tags, Effect playEffect, Effect actionEffect) {
+    public Card(String name, int cost, CardType type, CardTag[] tags, Requirement requirement, Effect playEffect, Effect actionEffect) {
         this.name = name;
         this.cost = cost;
         this.type = type;
         this.tags = tags;
         this.playEffect = playEffect;
         this.actionEffect = actionEffect;
+        this.requirement = requirement;
     }
 
     public String getName() {
@@ -39,5 +41,9 @@ public class Card {
 
     public Effect getActionEffect() {
         return actionEffect;
+    }
+
+    public Requirement getRequirement() {
+        return requirement;
     }
 }

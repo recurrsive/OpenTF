@@ -11,6 +11,12 @@ public class CardStateBuilder implements CardStateOrBuilder {
         this.activated = activated;
     }
 
+    public CardStateBuilder(CardState template){
+        card = template.getCard();
+        counters = template.getCounters();
+        activated = template.isActivated();
+    }
+
     public Card getCard() {
         return card;
     }
