@@ -14,9 +14,9 @@ public class DecreaseAmountEffect implements Effect {
     public GameState[] apply(GameStateBuilder state, PlayerID currentPlayer) {
         Map<ResourceType, Integer> amounts = state.getPlayerByID(currentPlayer).getAmounts();
 
-        amounts.put(type, amounts.get(type) + amount);
+        amounts.put(type, amounts.get(type) - amount);
 
-        if (amounts.get(type) < 0) return new GameState[0];
+        if (amounts.get(type) < amount) return new GameState[0];
         return new GameState[]{state.build()};
     }
 }

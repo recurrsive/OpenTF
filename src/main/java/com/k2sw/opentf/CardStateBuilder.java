@@ -5,10 +5,10 @@ public class CardStateBuilder implements CardStateOrBuilder {
     private int counters;
     private boolean activated;
 
-    public CardStateBuilder(Card card, int counters, boolean activated) {
-        this.card = card;
-        this.counters = counters;
-        this.activated = activated;
+    public CardStateBuilder() {
+        this.card = null;
+        this.counters = 0;
+        this.activated = false;
     }
 
     public CardStateBuilder(CardState template){
@@ -29,16 +29,19 @@ public class CardStateBuilder implements CardStateOrBuilder {
         return activated;
     }
 
-    public void setCard(Card card) {
+    public CardStateBuilder withCard(Card card) {
         this.card = card;
+        return this;
     }
 
-    public void setCounters(int counters) {
+    public CardStateBuilder withCounters(int counters) {
         this.counters = counters;
+        return this;
     }
 
-    public void setActivated(boolean activated) {
+    public CardStateBuilder withActivated(boolean activated) {
         this.activated = activated;
+        return this;
     }
 
     public CardState build(){

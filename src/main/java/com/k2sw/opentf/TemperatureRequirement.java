@@ -9,7 +9,7 @@ public class TemperatureRequirement implements Requirement {
     }
 
     @Override
-    public boolean check(GameState state) {
+    public boolean check(GameStateBuilder state) {
         if (greater)
             return state.getTemperature() >= amount;
         else

@@ -1,11 +1,8 @@
 package com.k2sw.opentf;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-public class GameStateBuilder implements GameStateOrBuilder {
+public class GameStateBuilder {
     //Between 0 and 14
     private int oxygen;
     //Between -30 and 10, in increments of 2
@@ -14,12 +11,12 @@ public class GameStateBuilder implements GameStateOrBuilder {
     private Map<TileSlot, Tile> placedTiles;
     private Set<TileSlot> unplacedSlots;
 
-    public GameStateBuilder(int oxygen, int temperature, PlayerBuilder[] players, Map<TileSlot, Tile> placedTiles, Set<TileSlot> unplacedSlots) {
-        this.oxygen = oxygen;
-        this.temperature = temperature;
-        this.players = players;
-        this.placedTiles = placedTiles;
-        this.unplacedSlots = unplacedSlots;
+    public GameStateBuilder() {
+        this.oxygen = 0;
+        this.temperature = 0;
+        this.players = new PlayerBuilder[0];
+        this.placedTiles = new HashMap<>();
+        this.unplacedSlots = new HashSet<>();
     }
 
     public GameStateBuilder(GameState template){
@@ -40,24 +37,27 @@ public class GameStateBuilder implements GameStateOrBuilder {
         return oxygen;
     }
 
-    public void setOxygen(int oxygen) {
+    public GameStateBuilder withOxygen(int oxygen) {
         this.oxygen = oxygen;
+        return this;
     }
 
     public int getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(int temperature) {
+    public GameStateBuilder withTemperature(int temperature) {
         this.temperature = temperature;
+        return this;
     }
 
     public PlayerBuilder[] getPlayers() {
         return players;
     }
 
-    public void setPlayers(PlayerBuilder[] players) {
+    public GameStateBuilder withPlayers(PlayerBuilder[] players) {
         this.players = players;
+        return this;
     }
 
     public PlayerBuilder getPlayerByID(PlayerID id){
@@ -71,16 +71,18 @@ public class GameStateBuilder implements GameStateOrBuilder {
         return placedTiles;
     }
 
-    public void setPlacedTiles(Map<TileSlot, Tile> placedTiles) {
+    public GameStateBuilder withPlacedTiles(Map<TileSlot, Tile> placedTiles) {
         this.placedTiles = placedTiles;
+        return this;
     }
 
     public Set<TileSlot> getUnplacedSlots() {
         return unplacedSlots;
     }
 
-    public void setUnplacedSlots(Set<TileSlot> unplacedSlots) {
+    public GameStateBuilder withUnplacedSlots(Set<TileSlot> unplacedSlots) {
         this.unplacedSlots = unplacedSlots;
+        return this;
     }
 
     public GameState build() {

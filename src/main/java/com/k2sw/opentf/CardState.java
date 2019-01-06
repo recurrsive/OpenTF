@@ -1,5 +1,7 @@
 package com.k2sw.opentf;
 
+import java.util.Objects;
+
 public class CardState implements CardStateOrBuilder {
     private Card card;
     private int counters;
@@ -21,5 +23,20 @@ public class CardState implements CardStateOrBuilder {
 
     public boolean isActivated() {
         return activated;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CardState cardState = (CardState) o;
+        return counters == cardState.counters &&
+                activated == cardState.activated &&
+                Objects.equals(card, cardState.card);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(card, counters, activated);
     }
 }

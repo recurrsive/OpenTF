@@ -1,10 +1,8 @@
 package com.k2sw.opentf;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-public class GameState implements GameStateOrBuilder {
+public class GameState {
     //Between 0 and 13
     private int oxygen;
     //Between -30 and 10, in increments of 2
@@ -21,12 +19,10 @@ public class GameState implements GameStateOrBuilder {
         this.unplacedSlots = unplacedSlots;
     }
 
-    @Override
     public int getOxygen() {
         return oxygen;
     }
 
-    @Override
     public int getTemperature() {
         return temperature;
     }
@@ -48,5 +44,24 @@ public class GameState implements GameStateOrBuilder {
 
     public Set<TileSlot> getUnplacedSlots() {
         return unplacedSlots;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GameState gameState = (GameState) o;
+        return oxygen == gameState.oxygen &&
+                temperature == gameState.temperature &&
+                Arrays.equals(players, gameState.players) &&
+                Objects.equals(placedTiles, gameState.placedTiles) &&
+                Objects.equals(unplacedSlots, gameState.unplacedSlots);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(oxygen, temperature, placedTiles, unplacedSlots);
+        result = 31 * result + Arrays.hashCode(players);
+        return result;
     }
 }

@@ -1,6 +1,7 @@
 package com.k2sw.opentf;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerBuilder implements PlayerOrBuilder {
@@ -10,17 +11,24 @@ public class PlayerBuilder implements PlayerOrBuilder {
     private PlayerID playerID;
     private CardStateBuilder[] tableau;
 
-    public PlayerBuilder(Map<ResourceType, Integer> production, Map<ResourceType, Integer> amounts, int terraformingScore, PlayerID playerID, CardStateBuilder[] tableau) {
-        this.production = production;
-        this.amounts = amounts;
-        this.terraformingScore = terraformingScore;
-        this.playerID = playerID;
-        this.tableau = tableau;
+    public PlayerBuilder() {
+        this.production = new HashMap<>();
+        this.amounts = new HashMap<>();
+        this.terraformingScore = 0;
+        this.playerID = null;
+        this.tableau = new CardStateBuilder[0];
+
+        for (ResourceType type : ResourceType.values()){
+            production.put(type, 1);
+            amounts.put(type, 0);
+        }
     }
 
     public PlayerBuilder(Player template){
-        production = template.getProduction();
-        amounts = template.getAmounts();
+        production = new HashMap<>();
+        production.putAll(template.getProduction());
+        amounts = new HashMap<>();
+        amounts.putAll(template.getAmounts());
         terraformingScore = template.getTerraformingScore();
         playerID = template.getPlayerID();
         CardStateBuilder[] results = new CardStateBuilder[template.getTableau().length];
@@ -54,24 +62,29 @@ public class PlayerBuilder implements PlayerOrBuilder {
         return tableau;
     }
 
-    public void setProduction(Map<ResourceType, Integer> production) {
-        this.production = production;
+    public PlayerBuilder withProduction(ResourceType type, int amount) {
+        this.production.put(type, amount);
+        return this;
     }
 
-    public void setAmounts(Map<ResourceType, Integer> amounts) {
-        this.amounts = amounts;
+    public PlayerBuilder withAmount(ResourceType type, int amount) {
+        this.amounts.put(type, amount);
+        return this;
     }
 
-    public void setTerraformingScore(int terraformingScore) {
+    public PlayerBuilder withTerraformingScore(int terraformingScore) {
         this.terraformingScore = terraformingScore;
+        return this;
     }
 
-    public void setPlayerID(PlayerID playerID) {
+    public PlayerBuilder withPlayerID(PlayerID playerID) {
         this.playerID = playerID;
+        return this;
     }
 
-    public void setTableau(CardStateBuilder[] tableau) {
+    public PlayerBuilder withTableau(CardStateBuilder[] tableau) {
         this.tableau = tableau;
+        return this;
     }
 
     public Player build() {

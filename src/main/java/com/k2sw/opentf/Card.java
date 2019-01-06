@@ -8,8 +8,9 @@ public class Card {
     private Effect playEffect;
     private Effect actionEffect;
     private Requirement requirement;
+    private VictoryScorer scorer;
 
-    public Card(String name, int cost, CardType type, CardTag[] tags, Requirement requirement, Effect playEffect, Effect actionEffect) {
+    public Card(String name, int cost, CardType type, CardTag[] tags, Requirement requirement, Effect playEffect, Effect actionEffect, VictoryScorer scorer) {
         this.name = name;
         this.cost = cost;
         this.type = type;
@@ -17,6 +18,7 @@ public class Card {
         this.playEffect = playEffect;
         this.actionEffect = actionEffect;
         this.requirement = requirement;
+        this.scorer = scorer;
     }
 
     public String getName() {
@@ -45,5 +47,15 @@ public class Card {
 
     public Requirement getRequirement() {
         return requirement;
+    }
+
+    public VictoryScorer getScorer() {
+        return scorer;
+    }
+
+    public static GameState[] play(Card card, GameStateBuilder state, PlayerID currentPlayer){
+        if (card.requirement.check(state)){
+            return (new CompoundEffect(new DecreaseAmountEffect(ResourceType.MegaCredits, card.cost), card.playEffect)).apply(state, currentPlayer);
+        } else return new GameState[0];
     }
 }

@@ -5,7 +5,7 @@ public class CompoundRequirement implements Requirement {
     private Requirement req2;
 
     @Override
-    public boolean check(GameState state) {
+    public boolean check(GameStateBuilder state) {
         return req1.check(state) && req2.check(state);
     }
 }

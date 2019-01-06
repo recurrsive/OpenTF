@@ -1,7 +1,9 @@
 package com.k2sw.opentf;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Player implements PlayerOrBuilder {
     private Map<ResourceType, Integer> production;
@@ -40,5 +42,24 @@ public class Player implements PlayerOrBuilder {
 
     public CardState[] getTableau() {
         return tableau;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return terraformingScore == player.terraformingScore &&
+                Objects.equals(production, player.production) &&
+                Objects.equals(amounts, player.amounts) &&
+                Objects.equals(playerID, player.playerID) &&
+                Arrays.equals(tableau, player.tableau);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(production, amounts, terraformingScore, playerID);
+        result = 31 * result + Arrays.hashCode(tableau);
+        return result;
     }
 }
