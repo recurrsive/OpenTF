@@ -8,4 +8,12 @@ public class ResourceBonus {
         this.bonusType = bonusType;
         this.count = count;
     }
+
+    public ResourceBonusType getBonusType() {
+        return bonusType;
+    }
+
+    public int getCount() {
+        return count;
+    }
 }

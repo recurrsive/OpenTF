@@ -1,15 +1,15 @@
 package com.k2sw.opentf;
 
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-public class PlayerBuilder implements PlayerOrBuilder {
+public class PlayerBuilder {
     private Map<ResourceType, Integer> production;
     private Map<ResourceType, Integer> amounts;
     private int terraformingScore;
     private PlayerID playerID;
     private CardStateBuilder[] tableau;
+    private Set<Card> hand;
 
     public PlayerBuilder() {
         this.production = new HashMap<>();
@@ -17,6 +17,7 @@ public class PlayerBuilder implements PlayerOrBuilder {
         this.terraformingScore = 0;
         this.playerID = null;
         this.tableau = new CardStateBuilder[0];
+        this.hand = new HashSet<>();
 
         for (ResourceType type : ResourceType.values()){
             production.put(type, 1);
@@ -36,24 +37,21 @@ public class PlayerBuilder implements PlayerOrBuilder {
             results[i] = new CardStateBuilder(template.getTableau()[i]);
         }
         tableau = results;
+        hand = new HashSet<>(template.getHand());
     }
 
-    @Override
     public Map<ResourceType, Integer> getProduction() {
         return production;
     }
 
-    @Override
     public Map<ResourceType, Integer> getAmounts() {
         return amounts;
     }
 
-    @Override
     public int getTerraformingScore() {
         return terraformingScore;
     }
 
-    @Override
     public PlayerID getPlayerID() {
         return playerID;
     }
@@ -62,18 +60,48 @@ public class PlayerBuilder implements PlayerOrBuilder {
         return tableau;
     }
 
+    public CardStateBuilder findCard(String name) {
+        for (CardStateBuilder cardState : tableau){
+            if (cardState.getCard().getName().equals(name)) return cardState;
+        }
+        return null;
+    }
+
+    public int getTagCount(CardTag tag) {
+        int total = 0;
+        for (CardStateBuilder cardState : tableau){
+            if (cardState.getCard().hasTag(tag)) total++;
+        }
+        return total;
+    }
+
     public PlayerBuilder withProduction(ResourceType type, int amount) {
-        this.production.put(type, amount);
+        production.put(type, amount);
         return this;
     }
 
     public PlayerBuilder withAmount(ResourceType type, int amount) {
-        this.amounts.put(type, amount);
+        amounts.put(type, amount);
+        return this;
+    }
+
+    public PlayerBuilder changeProduction(ResourceType type, int amount) {
+        production.put(type, production.get(type) + amount);
+        return this;
+    }
+
+    public PlayerBuilder changeAmount(ResourceType type, int amount) {
+        amounts.put(type, amounts.get(type) + amount);
         return this;
     }
 
     public PlayerBuilder withTerraformingScore(int terraformingScore) {
         this.terraformingScore = terraformingScore;
+        return this;
+    }
+
+    public PlayerBuilder increaseTerraformingScore(int amount) {
+        this.terraformingScore += amount;
         return this;
     }
 
@@ -87,6 +115,15 @@ public class PlayerBuilder implements PlayerOrBuilder {
         return this;
     }
 
+    public Set<Card> getHand() {
+        return hand;
+    }
+
+    public PlayerBuilder withHand(Set<Card> hand) {
+        this.hand = hand;
+        return this;
+    }
+
     public Player build() {
         Map<ResourceType, Integer> newProduction = Collections.unmodifiableMap(production);
         Map<ResourceType, Integer> newAmounts = Collections.unmodifiableMap(amounts);
@@ -96,6 +133,20 @@ public class PlayerBuilder implements PlayerOrBuilder {
             tableauResults[i] = tableau[i].build();
         }
 
-        return new Player(newProduction, newAmounts, terraformingScore, playerID, tableauResults);
+        Set<Card> newHand = Collections.unmodifiableSet(hand);
+        return new Player(newProduction, newAmounts, terraformingScore, playerID, tableauResults, newHand);
+    }
+
+
+    @Override
+    public String toString() {
+        return "PlayerBuilder{" +
+                "production=" + production +
+                ", amounts=" + amounts +
+                ", terraformingScore=" + terraformingScore +
+                ", playerID=" + playerID +
+                ", tableau=" + Arrays.toString(tableau) +
+                ", hand=" + hand +
+                '}';
     }
 }

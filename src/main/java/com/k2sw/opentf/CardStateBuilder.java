@@ -1,6 +1,6 @@
 package com.k2sw.opentf;
 
-public class CardStateBuilder implements CardStateOrBuilder {
+public class CardStateBuilder {
     private Card card;
     private int counters;
     private boolean activated;
@@ -46,5 +46,14 @@ public class CardStateBuilder implements CardStateOrBuilder {
 
     public CardState build(){
         return new CardState(card, counters, activated);
+    }
+
+    @Override
+    public String toString() {
+        return "CardStateBuilder{" +
+                "card=" + card +
+                ", counters=" + counters +
+                ", activated=" + activated +
+                '}';
     }
 }

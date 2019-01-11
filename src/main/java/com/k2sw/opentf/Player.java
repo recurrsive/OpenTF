@@ -1,47 +1,53 @@
 package com.k2sw.opentf;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
-public class Player implements PlayerOrBuilder {
+public class Player{
     private Map<ResourceType, Integer> production;
     private Map<ResourceType, Integer> amounts;
     private int terraformingScore;
     private PlayerID playerID;
     private CardState[] tableau;
+    private Set<Card> hand;
 
-    public Player(Map<ResourceType, Integer> production, Map<ResourceType, Integer> amounts, int terraformingScore, PlayerID playerID, CardState[] tableau) {
+    public Player(Map<ResourceType, Integer> production, Map<ResourceType, Integer> amounts, int terraformingScore, PlayerID playerID, CardState[] tableau, Set<Card> hand) {
         this.production = production;
         this.amounts = amounts;
         this.terraformingScore = terraformingScore;
         this.playerID = playerID;
         this.tableau = tableau;
+        this.hand = hand;
     }
 
-    @Override
     public Map<ResourceType, Integer> getProduction() {
         return production;
     }
 
-    @Override
     public Map<ResourceType, Integer> getAmounts() {
         return amounts;
     }
 
-    @Override
     public int getTerraformingScore() {
         return terraformingScore;
     }
 
-    @Override
     public PlayerID getPlayerID() {
         return playerID;
     }
 
     public CardState[] getTableau() {
         return tableau;
+    }
+
+    public Set<Card> getHand() {
+        return hand;
+    }
+
+    public CardState findCard(String name) {
+        for (CardState card : tableau){
+            if (card.getCard().getName().equals(name)) return card;
+        }
+        return null;
     }
 
     @Override
@@ -53,13 +59,19 @@ public class Player implements PlayerOrBuilder {
                 Objects.equals(production, player.production) &&
                 Objects.equals(amounts, player.amounts) &&
                 Objects.equals(playerID, player.playerID) &&
-                Arrays.equals(tableau, player.tableau);
+                Arrays.equals(tableau, player.tableau) &&
+                Objects.equals(hand, player.hand);
     }
 
     @Override
-    public int hashCode() {
-        int result = Objects.hash(production, amounts, terraformingScore, playerID);
-        result = 31 * result + Arrays.hashCode(tableau);
-        return result;
+    public String toString() {
+        return "Player{" +
+                "production=" + production +
+                ", amounts=" + amounts +
+                ", terraformingScore=" + terraformingScore +
+                ", playerID=" + playerID +
+                ", tableau=" + Arrays.toString(tableau) +
+                ", hand=" + hand +
+                '}';
     }
 }

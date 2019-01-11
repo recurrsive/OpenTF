@@ -1,11 +1,18 @@
 package com.k2sw.opentf;
 
 public class CompoundRequirement implements Requirement {
-    private Requirement req1;
-    private Requirement req2;
+    private Requirement[] reqs;
+
+    public CompoundRequirement(Requirement[] reqs) {
+        this.reqs = reqs;
+    }
 
     @Override
-    public boolean check(GameStateBuilder state) {
-        return req1.check(state) && req2.check(state);
+    public boolean check(GameStateBuilder state, PlayerID currentPlayer) {
+        boolean valid = true;
+        for (Requirement req : reqs) {
+            valid = req.check(state, currentPlayer);
+        }
+        return valid;
     }
 }

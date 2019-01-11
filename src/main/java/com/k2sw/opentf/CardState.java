@@ -2,7 +2,7 @@ package com.k2sw.opentf;
 
 import java.util.Objects;
 
-public class CardState implements CardStateOrBuilder {
+public class CardState {
     private Card card;
     private int counters;
     private boolean activated;
@@ -36,7 +36,11 @@ public class CardState implements CardStateOrBuilder {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(card, counters, activated);
+    public String toString() {
+        return "CardState{" +
+                "card=" + card +
+                ", counters=" + counters +
+                ", activated=" + activated +
+                '}';
     }
 }

@@ -10,6 +10,7 @@ public class GameStateBuilder {
     private PlayerBuilder[] players;
     private Map<TileSlot, Tile> placedTiles;
     private Set<TileSlot> unplacedSlots;
+    private List<Card> deck;
 
     public GameStateBuilder() {
         this.oxygen = 0;
@@ -17,6 +18,7 @@ public class GameStateBuilder {
         this.players = new PlayerBuilder[0];
         this.placedTiles = new HashMap<>();
         this.unplacedSlots = new HashSet<>();
+        this.deck = new ArrayList<>();
     }
 
     public GameStateBuilder(GameState template){
@@ -29,8 +31,11 @@ public class GameStateBuilder {
         }
         players = results;
 
-        placedTiles = Collections.unmodifiableMap(template.getPlacedTiles());
-        unplacedSlots = Collections.unmodifiableSet(template.getUnplacedSlots());
+        placedTiles = new HashMap<>();
+        placedTiles.putAll(template.getPlacedTiles());
+        unplacedSlots = new HashSet<>();
+        unplacedSlots.addAll(template.getUnplacedSlots());
+        deck = new ArrayList<>(template.getDeck());
     }
 
     public int getOxygen() {
@@ -67,8 +72,27 @@ public class GameStateBuilder {
         return null;
     }
 
+    public CardStateBuilder[] getAllTableaus() {
+        ArrayList<CardStateBuilder> playedCardList = new ArrayList<>();
+        for (PlayerBuilder player : players) {
+            Collections.addAll(playedCardList, player.getTableau());
+        }
+        CardStateBuilder[] results = new CardStateBuilder[playedCardList.size()];
+        playedCardList.toArray(results);
+        return results;
+    }
+
     public Map<TileSlot, Tile> getPlacedTiles() {
         return placedTiles;
+    }
+
+    public Set<Tile> getAdjacentPlacedTiles(TileSlot slot) {
+        List<TileSlot> neighbors = slot.getNeighbors();
+        Set<Tile> neighborTiles = new HashSet<>();
+        for (TileSlot s : neighbors) {
+            if (placedTiles.containsKey(s)) neighborTiles.add(placedTiles.get(s));
+        }
+        return neighborTiles;
     }
 
     public GameStateBuilder withPlacedTiles(Map<TileSlot, Tile> placedTiles) {
@@ -85,6 +109,30 @@ public class GameStateBuilder {
         return this;
     }
 
+    public List<Card> getDeck() {
+        return deck;
+    }
+
+    public GameStateBuilder withDeck(List<Card> deck) {
+        this.deck = deck;
+        return this;
+    }
+
+    public Set<TileSlot> getTileSlotsByType(TileSlotType type){
+        Set<TileSlot> result = new HashSet<>();
+        for (TileSlot slot : unplacedSlots) {
+            if (slot.getTileSlotType() == type) result.add(slot);
+        }
+        return result;
+    }
+
+    public GameStateBuilder placeTile(TileSlot slot, Tile tile){
+        if (!unplacedSlots.contains(slot)) throw new RuntimeException("Slot to be placed on is not in GameStateBuilder");
+        placedTiles.put(slot, tile);
+        unplacedSlots.remove(slot);
+        return this;
+    }
+
     public GameState build() {
         Player[] result = new Player[players.length];
         for (int i = 0; i < players.length; i++){
@@ -92,8 +140,8 @@ public class GameStateBuilder {
         }
         Map<TileSlot, Tile> newPlacedTiles = Collections.unmodifiableMap(placedTiles);
         Set<TileSlot> newUnplacedSlots = Collections.unmodifiableSet(unplacedSlots);
+        List<Card> newDeck = Collections.unmodifiableList(deck);
 
-
-        return new GameState(oxygen, temperature, result, newPlacedTiles, newUnplacedSlots);
+        return new GameState(oxygen, temperature, result, newPlacedTiles, newUnplacedSlots, newDeck);
     }
 }

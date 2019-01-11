@@ -9,8 +9,16 @@ public class OxygenRequirement implements Requirement {
         this.greater = greater;
     }
 
+    public int getAmount() {
+        return amount;
+    }
+
+    public boolean isGreater() {
+        return greater;
+    }
+
     @Override
-    public boolean check(GameStateBuilder state) {
+    public boolean check(GameStateBuilder state, PlayerID currentPlayer) {
         if (greater)
             return state.getOxygen() >= amount;
         else

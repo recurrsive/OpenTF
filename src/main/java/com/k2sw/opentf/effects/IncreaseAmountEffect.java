@@ -1,6 +1,6 @@
-package com.k2sw.opentf;
+package com.k2sw.opentf.effects;
 
-import java.util.Map;
+import com.k2sw.opentf.*;
 
 public class IncreaseAmountEffect implements Effect {
     private ResourceType type;
@@ -12,9 +12,7 @@ public class IncreaseAmountEffect implements Effect {
     }
 
     public GameState[] apply(GameStateBuilder state, PlayerID currentPlayer) {
-        Map<ResourceType, Integer> amounts = state.getPlayerByID(currentPlayer).getAmounts();
-
-        amounts.put(type, amounts.get(type) + amount);
+        state.getPlayerByID(currentPlayer).changeAmount(type, amount);
 
         return new GameState[]{state.build()};
     }

@@ -7,5 +7,5 @@ public class GenericScorer implements VictoryScorer {
         this.amount = amount;
     }
 
-    public int score(GameState state) { return amount; }
+    public int score(GameState state, PlayerID owner) { return amount; }
 }

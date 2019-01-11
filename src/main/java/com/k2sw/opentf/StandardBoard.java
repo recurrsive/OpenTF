@@ -1,30 +1,28 @@
 package com.k2sw.opentf;
 
-import com.sun.tools.doclets.standard.Standard;
-
 import java.util.*;
 import java.util.function.BiConsumer;
 
 public class StandardBoard {
 
     private TileSlot steel(int n) {
-        return new TileSlot(TileSlotType.Dessert, new ResourceBonus[]{new ResourceBonus(ResourceBonusType.Steel, n)});
+        return new TileSlot(TileSlotType.Desert, new ResourceBonus[]{new ResourceBonus(ResourceBonusType.Steel, n)});
     }
 
     private TileSlot plant(int n) {
-        return new TileSlot(TileSlotType.Dessert, new ResourceBonus[]{new ResourceBonus(ResourceBonusType.Plants, n)});
+        return new TileSlot(TileSlotType.Desert, new ResourceBonus[]{new ResourceBonus(ResourceBonusType.Plants, n)});
     }
 
     private TileSlot card(int n) {
-        return new TileSlot(TileSlotType.Dessert, new ResourceBonus[]{new ResourceBonus(ResourceBonusType.Cards, n)});
+        return new TileSlot(TileSlotType.Desert, new ResourceBonus[]{new ResourceBonus(ResourceBonusType.Cards, n)});
     }
 
     private TileSlot titanium(int n) {
-        return new TileSlot(TileSlotType.Dessert, new ResourceBonus[]{new ResourceBonus(ResourceBonusType.Titanium, n)});
+        return new TileSlot(TileSlotType.Desert, new ResourceBonus[]{new ResourceBonus(ResourceBonusType.Titanium, n)});
     }
 
     private TileSlot blank() {
-        return new TileSlot(TileSlotType.Dessert, new ResourceBonus[0]);
+        return new TileSlot(TileSlotType.Desert, new ResourceBonus[0]);
     }
 
     private TileSlot noctis(TileSlot slot) {
@@ -36,14 +34,14 @@ public class StandardBoard {
     }
 
     private TileSlot pavonis() {
-        return new TileSlot(TileSlotType.Dessert, new ResourceBonus[]{new ResourceBonus(ResourceBonusType.Titanium, 1),
+        return new TileSlot(TileSlotType.Desert, new ResourceBonus[]{new ResourceBonus(ResourceBonusType.Titanium, 1),
                 new ResourceBonus(ResourceBonusType.Plants, 1)});
     }
 
     private TileSlot[][] rows;
 
-    public Set<TileSlot> getAllSlots() {
-        Set<TileSlot> result = new HashSet<>();
+    public ArrayList<TileSlot> getAllSlots() {
+        ArrayList<TileSlot> result = new ArrayList<>();
         for (TileSlot[] row : rows) {
             Collections.addAll(result, row);
         }
@@ -81,4 +79,5 @@ public class StandardBoard {
             }
         }
     }
+
 }

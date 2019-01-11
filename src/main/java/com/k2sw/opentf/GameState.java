@@ -10,13 +10,15 @@ public class GameState {
     private Player[] players;
     private Map<TileSlot, Tile> placedTiles;
     private Set<TileSlot> unplacedSlots;
+    private List<Card> deck;
 
-    public GameState(int oxygen, int temperature, Player[] players, Map<TileSlot, Tile> placedTiles, Set<TileSlot> unplacedSlots) {
+    public GameState(int oxygen, int temperature, Player[] players, Map<TileSlot, Tile> placedTiles, Set<TileSlot> unplacedSlots, List<Card> deck) {
         this.oxygen = oxygen;
         this.temperature = temperature;
         this.players = players;
         this.placedTiles = placedTiles;
         this.unplacedSlots = unplacedSlots;
+        this.deck = deck;
     }
 
     public int getOxygen() {
@@ -38,12 +40,26 @@ public class GameState {
         return players;
     }
 
+    public CardState[] getAllTableaus() {
+        ArrayList<CardState> playedCardList = new ArrayList<>();
+        for (Player player : players) {
+            Collections.addAll(playedCardList, player.getTableau());
+        }
+        CardState[] results = new CardState[playedCardList.size()];
+        playedCardList.toArray(results);
+        return results;
+    }
+
     public Map<TileSlot, Tile> getPlacedTiles() {
         return placedTiles;
     }
 
     public Set<TileSlot> getUnplacedSlots() {
         return unplacedSlots;
+    }
+
+    public List<Card> getDeck() {
+        return deck;
     }
 
     @Override
@@ -55,13 +71,19 @@ public class GameState {
                 temperature == gameState.temperature &&
                 Arrays.equals(players, gameState.players) &&
                 Objects.equals(placedTiles, gameState.placedTiles) &&
-                Objects.equals(unplacedSlots, gameState.unplacedSlots);
+                Objects.equals(unplacedSlots, gameState.unplacedSlots) &&
+                Objects.equals(deck, gameState.deck);
     }
 
     @Override
-    public int hashCode() {
-        int result = Objects.hash(oxygen, temperature, placedTiles, unplacedSlots);
-        result = 31 * result + Arrays.hashCode(players);
-        return result;
+    public String toString() {
+        return "GameState{" +
+                "oxygen=" + oxygen +
+                ", temperature=" + temperature +
+                ", players=" + Arrays.toString(players) +
+                ", placedTiles=" + placedTiles +
+                ", unplacedSlots=" + unplacedSlots +
+                ", deck=" + deck +
+                '}';
     }
 }
