@@ -11,14 +11,18 @@ public class GameState {
     private Map<TileSlot, Tile> placedTiles;
     private Set<TileSlot> unplacedSlots;
     private List<Card> deck;
+    private List<Card> discard;
+    private int generationNum;
 
-    public GameState(int oxygen, int temperature, Player[] players, Map<TileSlot, Tile> placedTiles, Set<TileSlot> unplacedSlots, List<Card> deck) {
+    public GameState(int oxygen, int temperature, Player[] players, Map<TileSlot, Tile> placedTiles, Set<TileSlot> unplacedSlots, List<Card> deck, List<Card> discard, int generationNum) {
         this.oxygen = oxygen;
         this.temperature = temperature;
         this.players = players;
         this.placedTiles = placedTiles;
         this.unplacedSlots = unplacedSlots;
         this.deck = deck;
+        this.discard = discard;
+        this.generationNum = generationNum;
     }
 
     public int getOxygen() {
@@ -54,12 +58,30 @@ public class GameState {
         return placedTiles;
     }
 
+    public List<Tile> getTilesByType(TileType type){
+        List<Tile> result = new ArrayList<>();
+        for (Tile tile : placedTiles.values()) {
+            if (tile.getTileType() == type) {
+                result.add(tile);
+            }
+        }
+        return result;
+    }
+
     public Set<TileSlot> getUnplacedSlots() {
         return unplacedSlots;
     }
 
     public List<Card> getDeck() {
         return deck;
+    }
+
+    public int getGenerationNum() {
+        return generationNum;
+    }
+
+    public List<Card> getDiscard() {
+        return discard;
     }
 
     @Override
@@ -69,10 +91,12 @@ public class GameState {
         GameState gameState = (GameState) o;
         return oxygen == gameState.oxygen &&
                 temperature == gameState.temperature &&
+                generationNum == gameState.generationNum &&
                 Arrays.equals(players, gameState.players) &&
                 Objects.equals(placedTiles, gameState.placedTiles) &&
                 Objects.equals(unplacedSlots, gameState.unplacedSlots) &&
-                Objects.equals(deck, gameState.deck);
+                Objects.equals(deck, gameState.deck) &&
+                Objects.equals(discard, gameState.discard);
     }
 
     @Override
@@ -84,6 +108,8 @@ public class GameState {
                 ", placedTiles=" + placedTiles +
                 ", unplacedSlots=" + unplacedSlots +
                 ", deck=" + deck +
+                ", discard=" + discard +
+                ", generationNum=" + generationNum +
                 '}';
     }
 }

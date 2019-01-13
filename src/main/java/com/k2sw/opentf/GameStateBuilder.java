@@ -11,6 +11,8 @@ public class GameStateBuilder {
     private Map<TileSlot, Tile> placedTiles;
     private Set<TileSlot> unplacedSlots;
     private List<Card> deck;
+    private List<Card> discard;
+    private int generationNum;
 
     public GameStateBuilder() {
         this.oxygen = 0;
@@ -19,6 +21,8 @@ public class GameStateBuilder {
         this.placedTiles = new HashMap<>();
         this.unplacedSlots = new HashSet<>();
         this.deck = new ArrayList<>();
+        this.discard = new ArrayList<>();
+        this.generationNum = 1;
     }
 
     public GameStateBuilder(GameState template){
@@ -36,6 +40,8 @@ public class GameStateBuilder {
         unplacedSlots = new HashSet<>();
         unplacedSlots.addAll(template.getUnplacedSlots());
         deck = new ArrayList<>(template.getDeck());
+        discard = new ArrayList<>(template.getDiscard());
+        generationNum = template.getGenerationNum();
     }
 
     public int getOxygen() {
@@ -70,16 +76,6 @@ public class GameStateBuilder {
             if (p.getPlayerID() == id) return p;
         }
         return null;
-    }
-
-    public CardStateBuilder[] getAllTableaus() {
-        ArrayList<CardStateBuilder> playedCardList = new ArrayList<>();
-        for (PlayerBuilder player : players) {
-            Collections.addAll(playedCardList, player.getTableau());
-        }
-        CardStateBuilder[] results = new CardStateBuilder[playedCardList.size()];
-        playedCardList.toArray(results);
-        return results;
     }
 
     public Map<TileSlot, Tile> getPlacedTiles() {
@@ -126,6 +122,46 @@ public class GameStateBuilder {
         return result;
     }
 
+    public List<Tile> getTilesByType(TileType type){
+        List<Tile> result = new ArrayList<>();
+        for (Tile tile : placedTiles.values()) {
+            if (tile.getTileType() == type) {
+                result.add(tile);
+            }
+        }
+        return result;
+    }
+
+    public int getGenerationNum() {
+        return generationNum;
+    }
+
+    public GameStateBuilder withGenerationNum(int num) {
+        generationNum = num;
+        return this;
+    }
+
+    public List<Card> getDiscard() {
+        return discard;
+    }
+
+    public GameStateBuilder withDiscard(List<Card> discard) {
+        this.discard = discard;
+        return this;
+    }
+
+    public GameStateBuilder addToDiscard(Card card) {
+        this.discard.add(card);
+        return this;
+    }
+
+    public GameStateBuilder cycleDiscard() {
+        deck.addAll(discard);
+        Collections.shuffle(deck);
+        discard = new ArrayList<>();
+        return this;
+    }
+
     public GameStateBuilder placeTile(TileSlot slot, Tile tile){
         if (!unplacedSlots.contains(slot)) throw new RuntimeException("Slot to be placed on is not in GameStateBuilder");
         placedTiles.put(slot, tile);
@@ -141,7 +177,8 @@ public class GameStateBuilder {
         Map<TileSlot, Tile> newPlacedTiles = Collections.unmodifiableMap(placedTiles);
         Set<TileSlot> newUnplacedSlots = Collections.unmodifiableSet(unplacedSlots);
         List<Card> newDeck = Collections.unmodifiableList(deck);
+        List<Card> newDiscard = Collections.unmodifiableList(discard);
 
-        return new GameState(oxygen, temperature, result, newPlacedTiles, newUnplacedSlots, newDeck);
+        return new GameState(oxygen, temperature, result, newPlacedTiles, newUnplacedSlots, newDeck, newDiscard, generationNum);
     }
 }

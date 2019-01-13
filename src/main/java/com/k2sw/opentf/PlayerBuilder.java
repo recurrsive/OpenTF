@@ -10,6 +10,8 @@ public class PlayerBuilder {
     private PlayerID playerID;
     private CardStateBuilder[] tableau;
     private Set<Card> hand;
+    private boolean passed;
+    private boolean singlePlayerOpponent;
 
     public PlayerBuilder() {
         this.production = new HashMap<>();
@@ -18,6 +20,8 @@ public class PlayerBuilder {
         this.playerID = null;
         this.tableau = new CardStateBuilder[0];
         this.hand = new HashSet<>();
+        this.passed = false;
+        this.singlePlayerOpponent = false;
 
         for (ResourceType type : ResourceType.values()){
             production.put(type, 1);
@@ -38,6 +42,8 @@ public class PlayerBuilder {
         }
         tableau = results;
         hand = new HashSet<>(template.getHand());
+        passed = template.hasPassed();
+        singlePlayerOpponent = template.isSinglePlayerOpponent();
     }
 
     public Map<ResourceType, Integer> getProduction() {
@@ -124,6 +130,24 @@ public class PlayerBuilder {
         return this;
     }
 
+    public boolean hasPassed() {
+        return passed;
+    }
+
+    public PlayerBuilder withPassed(boolean passed) {
+        this.passed = passed;
+        return this;
+    }
+
+    public boolean isSinglePlayerOpponent() {
+        return singlePlayerOpponent;
+    }
+
+    public PlayerBuilder withSinglePlayerOpponent(boolean singlePlayerOpponent) {
+        this.singlePlayerOpponent = singlePlayerOpponent;
+        return this;
+    }
+
     public Player build() {
         Map<ResourceType, Integer> newProduction = Collections.unmodifiableMap(production);
         Map<ResourceType, Integer> newAmounts = Collections.unmodifiableMap(amounts);
@@ -134,7 +158,7 @@ public class PlayerBuilder {
         }
 
         Set<Card> newHand = Collections.unmodifiableSet(hand);
-        return new Player(newProduction, newAmounts, terraformingScore, playerID, tableauResults, newHand);
+        return new Player(newProduction, newAmounts, terraformingScore, playerID, tableauResults, newHand, passed, singlePlayerOpponent);
     }
 
 
@@ -147,6 +171,7 @@ public class PlayerBuilder {
                 ", playerID=" + playerID +
                 ", tableau=" + Arrays.toString(tableau) +
                 ", hand=" + hand +
+                ", passed=" + passed +
                 '}';
     }
 }

@@ -54,7 +54,7 @@ public class StandardCardsTest {
         GameStateBuilder initialStateBuilder = new GameStateBuilder().withTemperature(0).withPlayers(new PlayerBuilder[]{p1});
         GameState initialState = initialStateBuilder.build();
         initialStateBuilder = new GameStateBuilder(initialState);
-        assertEquals(0, Card.play(StandardCards.trees, initialStateBuilder, id).length);
+        assertEquals(0, new PlayCardEffect(StandardCards.trees).apply(initialStateBuilder, id).length);
     }
 
     @Test
@@ -64,7 +64,7 @@ public class StandardCardsTest {
         GameStateBuilder initialStateBuilder = new GameStateBuilder().withTemperature(0).withPlayers(new PlayerBuilder[]{p1});
         GameState initialState = initialStateBuilder.build();
         initialStateBuilder = new GameStateBuilder(initialState);
-        assertEquals(1, Card.play(StandardCards.trees, initialStateBuilder, id).length);
+        assertEquals(1, new PlayCardEffect(StandardCards.trees).apply(initialStateBuilder, id).length);
     }
 
     @Test
@@ -74,7 +74,7 @@ public class StandardCardsTest {
         GameStateBuilder initialStateBuilder = new GameStateBuilder().withTemperature(0).withPlayers(new PlayerBuilder[]{p1});
         GameState initialState = initialStateBuilder.build();
         initialStateBuilder = new GameStateBuilder(initialState);
-        assertEquals(37, (int) Card.play(StandardCards.trees, initialStateBuilder, id)[0].getPlayerByID(id).getAmounts().get(ResourceType.MegaCredits));
+        assertEquals(37, (int) new PlayCardEffect(StandardCards.trees).apply(initialStateBuilder, id)[0].getPlayerByID(id).getAmounts().get(ResourceType.MegaCredits));
     }
     @Test
     public void treesShouldAddToTableau() {
@@ -82,7 +82,7 @@ public class StandardCardsTest {
         PlayerBuilder p1 = new PlayerBuilder().withPlayerID(id).withAmount(ResourceType.MegaCredits, 13);
         GameStateBuilder initialStateBuilder = new GameStateBuilder().withTemperature(0).withPlayers(new PlayerBuilder[]{p1});
 
-        GameState[] results = Card.play(StandardCards.trees, initialStateBuilder, id);
+        GameState[] results = new PlayCardEffect(StandardCards.trees).apply(initialStateBuilder, id);
 
         assertEquals(1, results.length);
         assertEquals(1, results[0].getPlayerByID(id).getTableau().length);
@@ -147,7 +147,7 @@ public class StandardCardsTest {
         PlayerBuilder p1 = new PlayerBuilder().withPlayerID(id).withAmount(ResourceType.MegaCredits, 13).withAmount(ResourceType.Steel, 1);
         GameStateBuilder initialStateBuilder = new GameStateBuilder().withPlayers(new PlayerBuilder[]{p1});
 
-        GameState[] finalResults = Card.play(StandardCards.deepWellHeating, initialStateBuilder, id);
+        GameState[] finalResults = new PlayCardEffect(StandardCards.deepWellHeating).apply(initialStateBuilder, id);
         assertEquals(2, finalResults.length);
         assertEquals(0, (int) finalResults[0].getPlayerByID(id).getAmounts().get(ResourceType.MegaCredits));
         assertEquals(1, (int) finalResults[0].getPlayerByID(id).getAmounts().get(ResourceType.Steel));
@@ -163,7 +163,7 @@ public class StandardCardsTest {
         GameState initialState = initialStateBuilder.build();
         initialStateBuilder = new GameStateBuilder(initialState);
 
-        GameState[] finalResults = Card.play(StandardCards.deepWellHeating, initialStateBuilder, id);
+        GameState[] finalResults = new PlayCardEffect(StandardCards.deepWellHeating).apply(initialStateBuilder, id);
         assertEquals(3, finalResults.length);
         assertEquals(0, (int) finalResults[0].getPlayerByID(id).getAmounts().get(ResourceType.MegaCredits));
         assertEquals(2, (int) finalResults[0].getPlayerByID(id).getAmounts().get(ResourceType.Steel));
@@ -181,7 +181,7 @@ public class StandardCardsTest {
         GameState initialState = initialStateBuilder.build();
         initialStateBuilder = new GameStateBuilder(initialState);
 
-        GameState[] finalResults = Card.play(StandardCards.deepWellHeating, initialStateBuilder, id);
+        GameState[] finalResults = new PlayCardEffect(StandardCards.deepWellHeating).apply(initialStateBuilder, id);
         assertEquals(2, finalResults.length);
         assertEquals(0, (int) finalResults[0].getPlayerByID(id).getAmounts().get(ResourceType.MegaCredits));
         assertEquals(1, (int) finalResults[0].getPlayerByID(id).getAmounts().get(ResourceType.Steel));
@@ -198,20 +198,51 @@ public class StandardCardsTest {
         GameStateBuilder initialStateBuilder = new GameStateBuilder().withPlayers(new PlayerBuilder[]{p1});
         GameState initialState = initialStateBuilder.build();
         initialStateBuilder = new GameStateBuilder(initialState);
-        assertEquals(0, Card.play(StandardCards.subterraneanReservoir, initialStateBuilder, id).length);
+        assertEquals(0, new PlayCardEffect(StandardCards.subterraneanReservoir).apply(initialStateBuilder, id).length);
     }
 
     @Test
     public void subterraneanReservoirShouldFailIfNoOceanTiles() {
         PlayerID id = new PlayerID(0);
-        PlayerBuilder p1 = new PlayerBuilder().withPlayerID(id).withTerraformingScore(0);
+        PlayerBuilder p1 = new PlayerBuilder().withPlayerID(id).withTerraformingScore(0).withAmount(ResourceType.MegaCredits, 50);
         TileSlot tile1 = new TileSlot(TileSlotType.Desert, new ResourceBonus[]{});
         Set<TileSlot> tiles = new HashSet<>();
         tiles.add(tile1);
         GameStateBuilder initialStateBuilder = new GameStateBuilder().withPlayers(new PlayerBuilder[]{p1}).withUnplacedSlots(tiles);
-        GameState initialState = initialStateBuilder.build();
-        initialStateBuilder = new GameStateBuilder(initialState);
-        assertEquals(0, Card.play(StandardCards.subterraneanReservoir, initialStateBuilder, id).length);
+
+        GameState[] finalStates = new PlayCardEffect(StandardCards.subterraneanReservoir).apply(initialStateBuilder, id);
+
+        assertEquals(1, finalStates.length);
+        assertEquals(0, finalStates[0].getPlacedTiles().size());
+    }
+
+    @Test
+    public void subterraneanReservoirShouldFailIf9OceanTiles() {
+        PlayerID id = new PlayerID(0);
+        PlayerBuilder p1 = new PlayerBuilder().withPlayerID(id).withTerraformingScore(0).withAmount(ResourceType.MegaCredits, 50);
+        TileSlot tile1 = new TileSlot(TileSlotType.Ocean, new ResourceBonus[]{});
+        TileSlot tile2 = new TileSlot(TileSlotType.Ocean, new ResourceBonus[]{});
+        TileSlot tile3 = new TileSlot(TileSlotType.Ocean, new ResourceBonus[]{});
+        TileSlot tile4 = new TileSlot(TileSlotType.Ocean, new ResourceBonus[]{});
+        TileSlot tile5 = new TileSlot(TileSlotType.Ocean, new ResourceBonus[]{});
+        TileSlot tile6 = new TileSlot(TileSlotType.Ocean, new ResourceBonus[]{});
+        TileSlot tile7 = new TileSlot(TileSlotType.Ocean, new ResourceBonus[]{});
+        TileSlot tile8 = new TileSlot(TileSlotType.Ocean, new ResourceBonus[]{});
+        TileSlot tile9 = new TileSlot(TileSlotType.Ocean, new ResourceBonus[]{});
+        TileSlot openTile = new TileSlot(TileSlotType.Ocean, new ResourceBonus[]{});
+        Set<TileSlot> unplaced = new HashSet<>(); unplaced.add(openTile);
+        Tile ocean = new Tile(Global.NO_PLAYER, TileType.Ocean);
+        Map<TileSlot, Tile> placed = new HashMap<>();
+        placed.put(tile1, ocean); placed.put(tile2, ocean); placed.put(tile3, ocean); placed.put(tile4, ocean); placed.put(tile5, ocean);
+        placed.put(tile6, ocean); placed.put(tile7, ocean); placed.put(tile8, ocean); placed.put(tile9, ocean);
+        GameStateBuilder initialStateBuilder = new GameStateBuilder()
+                .withPlayers(new PlayerBuilder[]{p1}).withPlacedTiles(placed).withUnplacedSlots(unplaced);
+
+        GameState[] finalStates = new PlayCardEffect(StandardCards.subterraneanReservoir).apply(initialStateBuilder, id);
+
+        assertEquals(1, finalStates.length);
+        assertEquals(9, finalStates[0].getPlacedTiles().size());
+
     }
 
     @Test
@@ -415,7 +446,7 @@ public class StandardCardsTest {
         GameStateBuilder initialStateBuilder = new GameStateBuilder().withPlayers(new PlayerBuilder[]{p1}).withUnplacedSlots(tiles);
         GameState initialState = initialStateBuilder.build();
         initialStateBuilder = new GameStateBuilder(initialState);
-        assertEquals(0, Card.play(StandardCards.domedCrater, initialStateBuilder, id).length);
+        assertEquals(0, new PlayCardEffect(StandardCards.domedCrater).apply(initialStateBuilder, id).length);
     }
 
     @Test
@@ -596,7 +627,7 @@ public class StandardCardsTest {
         GameState initialState = initialStateBuilder.build();
         initialStateBuilder = new GameStateBuilder(initialState);
 
-        GameState[] finalResults = Card.play(StandardCards.asteroid, initialStateBuilder, id);
+        GameState[] finalResults = new PlayCardEffect(StandardCards.asteroid).apply(initialStateBuilder, id);
         assertEquals(2, finalResults.length);
         assertEquals(0, (int) finalResults[0].getPlayerByID(id).getAmounts().get(ResourceType.MegaCredits));
         assertEquals(3, (int) finalResults[0].getPlayerByID(id).getAmounts().get(ResourceType.Titanium));
@@ -612,7 +643,7 @@ public class StandardCardsTest {
         GameState initialState = initialStateBuilder.build();
         initialStateBuilder = new GameStateBuilder(initialState);
 
-        GameState[] finalResults = Card.play(StandardCards.asteroid, initialStateBuilder, id);
+        GameState[] finalResults = new PlayCardEffect(StandardCards.asteroid).apply(initialStateBuilder, id);
         assertEquals(3, finalResults.length);
         assertEquals(0, (int) finalResults[0].getPlayerByID(id).getAmounts().get(ResourceType.MegaCredits));
         assertEquals(4, (int) finalResults[0].getPlayerByID(id).getAmounts().get(ResourceType.Titanium));
@@ -630,7 +661,7 @@ public class StandardCardsTest {
         GameState initialState = initialStateBuilder.build();
         initialStateBuilder = new GameStateBuilder(initialState);
 
-        GameState[] finalResults = Card.play(StandardCards.asteroid, initialStateBuilder, id);
+        GameState[] finalResults = new PlayCardEffect(StandardCards.asteroid).apply(initialStateBuilder, id);
         assertEquals(2, finalResults.length);
         assertEquals(0, (int) finalResults[0].getPlayerByID(id).getAmounts().get(ResourceType.MegaCredits));
         assertEquals(3, (int) finalResults[0].getPlayerByID(id).getAmounts().get(ResourceType.Titanium));
@@ -961,7 +992,7 @@ public class StandardCardsTest {
         CardStateBuilder researchOutpost = new CardStateBuilder().withCard(StandardCards.researchOutpost);
         player.withTableau(new CardStateBuilder[]{researchOutpost});
 
-        GameState[] finalStates = Card.play(card1, initialState, id);
+        GameState[] finalStates = new PlayCardEffect(card1).apply(initialState, id);
         assertEquals(1, finalStates.length);
         assertEquals(1, (int) finalStates[0].getPlayerByID(id).getAmounts().get(ResourceType.MegaCredits));
     }
@@ -976,7 +1007,7 @@ public class StandardCardsTest {
         CardStateBuilder researchOutpost2 = new CardStateBuilder().withCard(StandardCards.researchOutpost);
         player.withTableau(new CardStateBuilder[]{researchOutpost1, researchOutpost2});
 
-        GameState[] finalStates = Card.play(card1, initialState, id);
+        GameState[] finalStates = new PlayCardEffect(card1).apply(initialState, id);
         assertEquals(1, finalStates.length);
         assertEquals(2, (int) finalStates[0].getPlayerByID(id).getAmounts().get(ResourceType.MegaCredits));
     }
@@ -1125,7 +1156,7 @@ public class StandardCardsTest {
         initialState.getPlayerByID(id).withTableau(tableau);
         Card card1 = TestHelpers.makeTestCardWithReq(new TemperatureRequirement(5, true), "card1");
 
-        assertEquals(1, Card.play(card1, initialState, id).length);
+        assertEquals(1, new PlayCardEffect(card1).apply(initialState, id).length);
     }
 
     @Test
@@ -1139,7 +1170,7 @@ public class StandardCardsTest {
         initialState.getPlayerByID(id).withTableau(tableau);
         Card card1 = TestHelpers.makeTestCardWithReq(new TemperatureRequirement(5, false), "card1");
 
-        assertEquals(1, Card.play(card1, initialState, id).length);
+        assertEquals(1, new PlayCardEffect(card1).apply(initialState, id).length);
     }
 
     @Test
@@ -1153,7 +1184,7 @@ public class StandardCardsTest {
         initialState.getPlayerByID(id).withTableau(tableau);
         Card card1 = TestHelpers.makeTestCardWithReq(new OxygenRequirement(5, true), "card1");
 
-        assertEquals(1, Card.play(card1, initialState, id).length);
+        assertEquals(1, new PlayCardEffect(card1).apply(initialState, id).length);
     }
 
     @Test
@@ -1167,7 +1198,7 @@ public class StandardCardsTest {
         initialState.getPlayerByID(id).withTableau(tableau);
         Card card1 = TestHelpers.makeTestCardWithReq(new OxygenRequirement(5, false), "card1");
 
-        assertEquals(1, Card.play(card1, initialState, id).length);
+        assertEquals(1, new PlayCardEffect(card1).apply(initialState, id).length);
     }
 
     @Test
@@ -1186,7 +1217,7 @@ public class StandardCardsTest {
         initialState.withPlacedTiles(placed);
         Card card1 = TestHelpers.makeTestCardWithReq(new OceanRequirement(4, true), "card1");
 
-        assertEquals(1, Card.play(card1, initialState, id).length);
+        assertEquals(1, new PlayCardEffect(card1).apply(initialState, id).length);
     }
 
     @Test
@@ -1205,7 +1236,7 @@ public class StandardCardsTest {
         initialState.withPlacedTiles(placed);
         Card card1 = TestHelpers.makeTestCardWithReq(new OceanRequirement(0, false), "card1");
 
-        assertEquals(1, Card.play(card1, initialState, id).length);
+        assertEquals(1, new PlayCardEffect(card1).apply(initialState, id).length);
     }
 
     @Test
@@ -1220,7 +1251,7 @@ public class StandardCardsTest {
         initialState.getPlayerByID(id).withTableau(tableau);
         Card card1 = TestHelpers.makeTestCardWithReq(new TemperatureRequirement(7, true), "card1");
 
-        assertEquals(1, Card.play(card1, initialState, id).length);
+        assertEquals(1, new PlayCardEffect(card1).apply(initialState, id).length);
     }
     //endregion
 
@@ -1255,7 +1286,7 @@ public class StandardCardsTest {
         GameStateBuilder initialStateBuilder = new GameStateBuilder().withPlayers(new PlayerBuilder[]{p1}).withUnplacedSlots(tiles);
         GameState initialState = initialStateBuilder.build();
         initialStateBuilder = new GameStateBuilder(initialState);
-        assertEquals(0, Card.play(StandardCards.moholeArea, initialStateBuilder, id).length);
+        assertEquals(0, new PlayCardEffect(StandardCards.moholeArea).apply(initialStateBuilder, id).length);
     }
     //endregion
 
@@ -1271,7 +1302,7 @@ public class StandardCardsTest {
         initialState.getPlayerByID(id).withTableau(tableau);
         Card card1 = TestHelpers.makeTestCardWithTags(new CardTag[]{CardTag.Space, CardTag.Event}, "card1");
 
-        GameState[] finalResults = Card.play(card1, initialState, id);
+        GameState[] finalResults = new PlayCardEffect(card1).apply(initialState, id);
 
         assertEquals(1, finalResults.length);
         assertEquals(3, (int) finalResults[0].getPlayerByID(id).getAmounts().get(ResourceType.MegaCredits));
@@ -1290,7 +1321,7 @@ public class StandardCardsTest {
         initialState.getPlayerByID(id).withTableau(tableau);
         Card card1 = TestHelpers.makeTestCardWithTags(new CardTag[]{CardTag.Space, CardTag.Event}, "card1");
 
-        GameState[] finalResults = Card.play(card1, initialState, id);
+        GameState[] finalResults = new PlayCardEffect(card1).apply(initialState, id);
 
         assertEquals(1, finalResults.length);
         assertEquals(6, (int) finalResults[0].getPlayerByID(id).getAmounts().get(ResourceType.MegaCredits));
@@ -1450,7 +1481,7 @@ public class StandardCardsTest {
         unplaced.add(new TileSlot(TileSlotType.Ocean, new ResourceBonus[0]));
         initialState.withUnplacedSlots(unplaced);
 
-        GameState[] finalStates = Card.play(StandardCards.subterraneanReservoir, initialState, id);
+        GameState[] finalStates = new PlayCardEffect(StandardCards.subterraneanReservoir).apply(initialState, id);
 
         assertEquals(1, finalStates.length);
         assertEquals(2, (int) finalStates[0].getPlayerByID(id).getAmounts().get(ResourceType.Plants));
@@ -1471,7 +1502,7 @@ public class StandardCardsTest {
         unplaced.add(new TileSlot(TileSlotType.Ocean, new ResourceBonus[0]));
         initialState.withUnplacedSlots(unplaced);
 
-        GameState[] finalStates = Card.play(StandardCards.subterraneanReservoir, initialState, id2);
+        GameState[] finalStates = new PlayCardEffect(StandardCards.subterraneanReservoir).apply(initialState, id2);
 
         assertEquals(1, finalStates.length);
         assertEquals(2, (int) finalStates[0].getPlayerByID(id).getAmounts().get(ResourceType.Plants));
@@ -1491,7 +1522,7 @@ public class StandardCardsTest {
         unplaced.add(new TileSlot(TileSlotType.Ocean, new ResourceBonus[0]));
         initialState.withUnplacedSlots(unplaced);
 
-        GameState[] finalStates = Card.play(StandardCards.subterraneanReservoir, initialState, id);
+        GameState[] finalStates = new PlayCardEffect(StandardCards.subterraneanReservoir).apply(initialState, id);
 
         assertEquals(1, finalStates.length);
         assertEquals(4, (int) finalStates[0].getPlayerByID(id).getAmounts().get(ResourceType.Plants));
@@ -1677,7 +1708,7 @@ public class StandardCardsTest {
         PlayerBuilder player = new PlayerBuilder().withPlayerID(id);
         GameStateBuilder initialState = new GameStateBuilder().withPlayers(new PlayerBuilder[]{player});
 
-        assertEquals(0, Card.play(StandardCards.beamFromAThoriumAsteroid, initialState, id).length);
+        assertEquals(0, new PlayCardEffect(StandardCards.beamFromAThoriumAsteroid).apply(initialState, id).length);
     }
 
     @Test
@@ -1690,7 +1721,7 @@ public class StandardCardsTest {
         };
         player.withTableau(tableau);
 
-        assertEquals(1, Card.play(StandardCards.beamFromAThoriumAsteroid, initialState, id).length);
+        assertEquals(1, new PlayCardEffect(StandardCards.beamFromAThoriumAsteroid).apply(initialState, id).length);
     }
     //endregion
 
@@ -1877,7 +1908,7 @@ public class StandardCardsTest {
         placed.put(slot1, greenery);
         initialState.withPlacedTiles(placed);
 
-        GameState[] finalStates = Card.play(StandardCards.ecologicalZone, initialState, id);
+        GameState[] finalStates = new PlayCardEffect(StandardCards.ecologicalZone).apply(initialState, id);
 
         assertEquals(0, finalStates.length);
     }
@@ -1898,7 +1929,7 @@ public class StandardCardsTest {
         placed.put(slot2, greenery);
         initialState.withPlacedTiles(placed).withUnplacedSlots(unplaced);
 
-        GameState[] finalStates = Card.play(StandardCards.ecologicalZone, initialState, id);
+        GameState[] finalStates = new PlayCardEffect(StandardCards.ecologicalZone).apply(initialState, id);
 
         assertEquals(1, finalStates.length);
         assertEquals(new Tile(id, TileType.Special), finalStates[0].getPlacedTiles().get(slot1));
@@ -1913,7 +1944,7 @@ public class StandardCardsTest {
         };
         player.withTableau(tableau);
 
-        GameState[] finalStates = Card.play(StandardCards.trees, initialState, id);
+        GameState[] finalStates = new PlayCardEffect(StandardCards.trees).apply(initialState, id);
 
         assertEquals(1, finalStates.length);
         assertEquals(1, finalStates[0].getPlayerByID(id).findCard("Ecological Zone").getCounters());
@@ -1928,7 +1959,7 @@ public class StandardCardsTest {
         };
         player.withTableau(tableau);
 
-        GameState[] finalStates = Card.play(TestHelpers.makeTestCardWithTags(new CardTag[]{CardTag.Plants, CardTag.Animals}, "card1"), initialState, id);
+        GameState[] finalStates = new PlayCardEffect(TestHelpers.makeTestCardWithTags(new CardTag[]{CardTag.Plants, CardTag.Animals}, "card1")).apply(initialState, id);
 
         assertEquals(1, finalStates.length);
         assertEquals(2, finalStates[0].getPlayerByID(id).findCard("Ecological Zone").getCounters());
@@ -2052,7 +2083,7 @@ public class StandardCardsTest {
         CardStateBuilder researchOutpost = new CardStateBuilder().withCard(StandardCards.shuttles);
         player.withTableau(new CardStateBuilder[]{researchOutpost});
 
-        GameState[] finalStates = Card.play(StandardCards.asteroid, initialState, id);
+        GameState[] finalStates = new PlayCardEffect(StandardCards.asteroid).apply(initialState, id);
         assertEquals(1, finalStates.length);
         assertEquals(2, (int) finalStates[0].getPlayerByID(id).getAmounts().get(ResourceType.MegaCredits));
     }
@@ -2064,7 +2095,7 @@ public class StandardCardsTest {
         CardStateBuilder researchOutpost = new CardStateBuilder().withCard(StandardCards.shuttles);
         player.withTableau(new CardStateBuilder[]{researchOutpost});
 
-        GameState[] finalStates = Card.play(StandardCards.searchForLife, initialState, id);
+        GameState[] finalStates = new PlayCardEffect(StandardCards.searchForLife).apply(initialState, id);
         assertEquals(1, finalStates.length);
         assertEquals(0, (int) finalStates[0].getPlayerByID(id).getAmounts().get(ResourceType.MegaCredits));
     }
@@ -2134,6 +2165,82 @@ public class StandardCardsTest {
 
         assertEquals(1, finalStates.length);
         assertEquals(2, (int) finalStates[0].getPlayerByID(id).getProduction().get(ResourceType.MegaCredits));
+    }
+    //endregion
+
+    //region card draw tests
+    @Test
+    public void draw2ShouldDraw2CardsIf2CardsInDeck() {
+        PlayerID id = new PlayerID(0);
+        PlayerBuilder player = new PlayerBuilder().withPlayerID(id);
+        GameStateBuilder initialState = new GameStateBuilder().withPlayers(new PlayerBuilder[]{player});
+        List<Card> deck = new ArrayList<>();
+        deck.add(StandardCards.birds); deck.add(StandardCards.trees);
+        initialState.withDeck(deck);
+
+        GameState[] finalStates = new CompoundEffect(new Effect[]{new DrawCardEffect(), new DrawCardEffect()}).apply(initialState, id);
+
+        assertEquals(1, finalStates.length);
+        assertEquals(2, finalStates[0].getPlayerByID(id).getHand().size());
+    }
+    @Test
+    public void draw2ShouldDraw2CardsIf2CardsInDiscard() {
+        PlayerID id = new PlayerID(0);
+        PlayerBuilder player = new PlayerBuilder().withPlayerID(id);
+        GameStateBuilder initialState = new GameStateBuilder().withPlayers(new PlayerBuilder[]{player});
+        List<Card> discard = new ArrayList<>();
+        discard.add(StandardCards.birds); discard.add(StandardCards.trees);
+        initialState.withDiscard(discard);
+
+        GameState[] finalStates = new CompoundEffect(new Effect[]{new DrawCardEffect(), new DrawCardEffect()}).apply(initialState, id);
+
+        assertEquals(1, finalStates.length);
+        assertEquals(2, finalStates[0].getPlayerByID(id).getHand().size());
+    }
+    @Test
+    public void draw2ShouldDraw2CardsIf1CardInDeckAnd1CardInDiscard() {
+        PlayerID id = new PlayerID(0);
+        PlayerBuilder player = new PlayerBuilder().withPlayerID(id);
+        GameStateBuilder initialState = new GameStateBuilder().withPlayers(new PlayerBuilder[]{player});
+        List<Card> deck = new ArrayList<>();
+        deck.add(StandardCards.birds);
+        initialState.withDeck(deck);
+        List<Card> discard = new ArrayList<>();
+        discard.add(StandardCards.trees);
+        initialState.withDiscard(discard);
+
+        GameState[] finalStates = new CompoundEffect(new Effect[]{new DrawCardEffect(), new DrawCardEffect()}).apply(initialState, id);
+
+        assertEquals(1, finalStates.length);
+        assertEquals(2, finalStates[0].getPlayerByID(id).getHand().size());
+    }
+    @Test
+    public void draw2ShouldDraw1Card1If1CardInDeck() {
+        PlayerID id = new PlayerID(0);
+        PlayerBuilder player = new PlayerBuilder().withPlayerID(id);
+        GameStateBuilder initialState = new GameStateBuilder().withPlayers(new PlayerBuilder[]{player});
+        List<Card> deck = new ArrayList<>();
+        deck.add(StandardCards.birds);
+        initialState.withDeck(deck);
+
+        GameState[] finalStates = new CompoundEffect(new Effect[]{new DrawCardEffect(), new DrawCardEffect()}).apply(initialState, id);
+
+        assertEquals(1, finalStates.length);
+        assertEquals(1, finalStates[0].getPlayerByID(id).getHand().size());
+    }
+    @Test
+    public void draw2ShouldDraw1Card1If1CardInDiscard() {
+        PlayerID id = new PlayerID(0);
+        PlayerBuilder player = new PlayerBuilder().withPlayerID(id);
+        GameStateBuilder initialState = new GameStateBuilder().withPlayers(new PlayerBuilder[]{player});
+        List<Card> discard = new ArrayList<>();
+        discard.add(StandardCards.birds);
+        initialState.withDiscard(discard);
+
+        GameState[] finalStates = new CompoundEffect(new Effect[]{new DrawCardEffect(), new DrawCardEffect()}).apply(initialState, id);
+
+        assertEquals(1, finalStates.length);
+        assertEquals(1, finalStates[0].getPlayerByID(id).getHand().size());
     }
     //endregion
 }

@@ -84,23 +84,6 @@ public class Card {
         return false;
     }
 
-    public static GameState[] play(Card card, GameStateBuilder state, PlayerID currentPlayer){
-        ArrayList<TriggerType> triggerTypeList = new ArrayList<>();
-        if (card.hasTag(CardTag.Space) && card.hasTag(CardTag.Event)) triggerTypeList.add(TriggerType.SpaceEventPlayed);
-        if (card.hasTag(CardTag.Plants)) triggerTypeList.add(TriggerType.PlantTagPlayed);
-        if (card.hasTag(CardTag.Microbes)) triggerTypeList.add(TriggerType.MicrobeTagPlayed);
-        if (card.hasTag(CardTag.Animals)) triggerTypeList.add(TriggerType.AnimalTagPlayed);
-        TriggerType[] triggerTypes = new TriggerType[triggerTypeList.size()];
-        triggerTypeList.toArray(triggerTypes);
-
-        return GameStateFunctions.triggerSearch(triggerTypes, new CompoundEffect(new Effect[]{
-                new AddCardToTableauEffect(card),
-                new CheckRequirementEffect(card.getRequirement()),
-                new PayForCostEffect(card.getTags(), false, card.cost),
-                card.playEffect
-        }).apply(state, currentPlayer), currentPlayer);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
