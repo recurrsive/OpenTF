@@ -1,5 +1,11 @@
 package com.k2sw.opentf;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 public class GameState {
@@ -13,8 +19,13 @@ public class GameState {
     private List<Card> deck;
     private List<Card> discard;
     private int generationNum;
+    private StandardBoard standardBoard;
 
-    public GameState(int oxygen, int temperature, Player[] players, Map<TileSlot, Tile> placedTiles, Set<TileSlot> unplacedSlots, List<Card> deck, List<Card> discard, int generationNum) {
+    public StandardBoard getStandardBoard() {
+        return standardBoard;
+    }
+
+    public GameState(int oxygen, int temperature, Player[] players, Map<TileSlot, Tile> placedTiles, Set<TileSlot> unplacedSlots, List<Card> deck, List<Card> discard, int generationNum, StandardBoard standardBoard) {
         this.oxygen = oxygen;
         this.temperature = temperature;
         this.players = players;
@@ -23,6 +34,8 @@ public class GameState {
         this.deck = deck;
         this.discard = discard;
         this.generationNum = generationNum;
+        this.standardBoard = standardBoard;
+
     }
 
     public int getOxygen() {
@@ -111,5 +124,17 @@ public class GameState {
                 ", discard=" + discard +
                 ", generationNum=" + generationNum +
                 '}';
+    }
+
+    public void save(Path path) throws IOException {
+        JSONObject outer = new JSONObject();
+        for (TileSlot slot : standardBoard.getAllSlots()) {
+            JSONObject entry = new JSONObject()
+                    .put("slot", slot.json());
+            if (placedTiles.containsKey(slot))
+                entry.put("tile", placedTiles.get(slot).toJson());
+            outer.append("board", entry);
+        }
+        Files.write(path, ("export default " + outer.toString(2)).getBytes(StandardCharsets.UTF_8));
     }
 }

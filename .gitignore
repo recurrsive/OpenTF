@@ -1,0 +1,5 @@
+.gradle
+.idea/workspace.xml
+out/
+.idea/pants.xml
+.idea/.name

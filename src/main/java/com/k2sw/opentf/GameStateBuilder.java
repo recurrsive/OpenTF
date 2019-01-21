@@ -13,6 +13,7 @@ public class GameStateBuilder {
     private List<Card> deck;
     private List<Card> discard;
     private int generationNum;
+    private StandardBoard standardBoard;
 
     public GameStateBuilder() {
         this.oxygen = 0;
@@ -23,6 +24,7 @@ public class GameStateBuilder {
         this.deck = new ArrayList<>();
         this.discard = new ArrayList<>();
         this.generationNum = 1;
+        this.standardBoard = new StandardBoard();
     }
 
     public GameStateBuilder(GameState template){
@@ -42,6 +44,11 @@ public class GameStateBuilder {
         deck = new ArrayList<>(template.getDeck());
         discard = new ArrayList<>(template.getDiscard());
         generationNum = template.getGenerationNum();
+        standardBoard = template.getStandardBoard();
+    }
+
+    public StandardBoard getStandardBoard() {
+        return standardBoard;
     }
 
     public int getOxygen() {
@@ -179,6 +186,6 @@ public class GameStateBuilder {
         List<Card> newDeck = Collections.unmodifiableList(deck);
         List<Card> newDiscard = Collections.unmodifiableList(discard);
 
-        return new GameState(oxygen, temperature, result, newPlacedTiles, newUnplacedSlots, newDeck, newDiscard, generationNum);
+        return new GameState(oxygen, temperature, result, newPlacedTiles, newUnplacedSlots, newDeck, newDiscard, generationNum, standardBoard);
     }
 }

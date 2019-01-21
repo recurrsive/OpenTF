@@ -48,13 +48,17 @@ public class StandardBoard {
         return result;
     }
 
+    public TileSlot at(int row, int col) {
+        return rows[row][col];
+    }
+
     public StandardBoard() {
         rows = new TileSlot[][]{
                 {steel(2), ocean(steel(2)), blank(), ocean(card(1)), ocean(blank())},
                 {blank(), steel(1), blank(), blank(), blank(), ocean(card(2))},
                 {card(1), blank(), blank(), blank(), blank(), blank(), steel(1)},
                 {pavonis(), plant(1), plant(1), plant(1), plant(2), plant(1), plant(1), ocean(plant(2))},
-                {plant(2), plant(2), noctis(plant(2)), ocean(plant(2)), ocean(plant(2)), ocean(plant(2)), plant(2), plant(2)},
+                {plant(2), plant(2), noctis(plant(2)), ocean(plant(2)), ocean(plant(2)), ocean(plant(2)), plant(2), plant(2), plant(2)},
                 {plant(1), plant(2), plant(1), plant(1), plant(1), ocean(plant(1)), ocean(plant(1)), ocean(plant(1))},
                 {blank(), blank(), blank(), blank(), blank(), plant(1), blank()},
                 {steel(2), blank(), card(1), card(1), blank(), titanium(1)},

@@ -1,5 +1,7 @@
 package com.k2sw.opentf;
 
+import org.json.JSONObject;
+
 import java.util.Objects;
 
 public class Tile {
@@ -34,5 +36,9 @@ public class Tile {
                 "ownerID=" + ownerID +
                 ", tileType=" + tileType +
                 '}';
+    }
+
+    public JSONObject toJson() {
+        return new JSONObject().put("tileType", this.tileType.toString());
     }
 }

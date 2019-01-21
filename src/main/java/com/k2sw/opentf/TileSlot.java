@@ -1,5 +1,7 @@
 package com.k2sw.opentf;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -33,5 +35,9 @@ public class TileSlot {
 
     public boolean isNeighbor(TileSlot slot) {
         return neighbors.contains(slot);
+    }
+
+    public JSONObject json() {
+        return new JSONObject().put("slotType", this.tileSlotType.toString());
     }
 }
