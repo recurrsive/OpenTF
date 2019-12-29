@@ -18,3 +18,7 @@ bin/
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+
+
+**/node_modules/**
+yarn.lock
