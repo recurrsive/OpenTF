@@ -19,5 +19,5 @@ export const boardReducer = stateActionMap({
 export const fetchBoardSuccess = board => ({type: Actions.FETCH_BOARD_SUCCESS, board})
 
 export const fetchBoard = (dispatch) => {
-  fetchJson('localhost:8080/greeting').then(result => dispatch(fetchBoardSuccess(result)))
+  fetchJson('/greeting').then(result => dispatch(fetchBoardSuccess(result)))
 }

@@ -26,6 +26,6 @@ const checkStatus = (response) => {
   throw new HttpError(response.status, response.statusText)
 }
 
-const fetchOptions = {credentials: 'include'}
+const fetchOptions = {}
 
 export const fetchJson = (url) => fetch(url, fetchOptions).then(checkStatus).then(response => response.json())
