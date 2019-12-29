@@ -2246,13 +2246,13 @@ public class StandardCardsTest {
 }
 /*
 PlayerID id = new PlayerID(0);
-PlayerBuilder player = new PlayerBuilder().withPlayerID(id);
-GameStateBuilder initialState = new GameStateBuilder().withPlayers(new PlayerBuilder[]{player});
+PlayerBuilder resources = new PlayerBuilder().withPlayerID(id);
+GameStateBuilder initialState = new GameStateBuilder().withPlayers(new PlayerBuilder[]{resources});
 
 CardStateBuilder[] tableau = new CardStateBuilder[]{
         new CardStateBuilder().withCard(StandardCards.card)
 };
-player.withTableau(tableau);
+resources.withTableau(tableau);
 
 TileSlot slot1 = new TileSlot(TileSlotType.Desert, new ResourceBonus[]{});
 Set<TileSlot> unplaced = new HashSet<>();

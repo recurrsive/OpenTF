@@ -16,6 +16,6 @@ public class WriteSampleBoard {
         state.placeTile(state.getStandardBoard().at(3, 0), new Tile(id, TileType.Ocean));
         state.placeTile(state.getStandardBoard().at(5, 5), new Tile(id, TileType.CapitalCity));
         state.placeTile(state.getStandardBoard().at(7, 2), new Tile(id, TileType.Special));
-        state.build().save(Paths.get("tf-js/src/board.js"));
+        state.build().save(Paths.get("tf-js/src/gamestate.js"));
     }
 }

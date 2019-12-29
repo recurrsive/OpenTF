@@ -3,7 +3,7 @@ import { render } from 'react-dom'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import {App} from './App'
-import {boardReducer} from './stores/Board'
+import {boardReducer} from './stores/Gamestate'
 
 import './index.css'
 import 'bootstrap/dist/css/bootstrap.css'
