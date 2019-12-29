@@ -145,7 +145,7 @@ public class GameState {
                     .put("slot", slot.json());
             if (placedTiles.containsKey(slot))
                 entry.put("tile", placedTiles.get(slot).toJson());
-            outer.append("board", entry);
+            outer.append("gamestate", entry);
         }
         Files.write(path, ("export default " + outer.toString(2)).getBytes(StandardCharsets.UTF_8));
     }

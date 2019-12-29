@@ -15,10 +15,8 @@ public class SellPatentsEffect implements Effect {
         for (int x = 0; x < hand.length; x++){
             GameStateBuilder nextState = new GameStateBuilder(initialState);
             ArrayList<Effect> effectList = new ArrayList<>();
-            for (int i = 0; i <= x; i++) {
-                effectList.add(new DiscardCardEffect(hand[i]));
-            }
-            effectList.add(new IncreaseAmountEffect(ResourceType.MegaCredits, x+1));
+            effectList.add(new DiscardCardEffect(hand[x]));
+            effectList.add(new IncreaseAmountEffect(ResourceType.MegaCredits, 1));
             Effect[] effects = new Effect[effectList.size()];
             effectList.toArray(effects);
             results[x] = new CompoundEffect(effects).apply(nextState, currentPlayer)[0];
