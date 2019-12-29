@@ -52,6 +52,10 @@ public class StandardBoard {
         return rows[row][col];
     }
 
+    public int getWidth(int row) { return rows[row].length; }
+
+    public int getHeight() { return rows.length; }
+
     public StandardBoard() {
         rows = new TileSlot[][]{
                 {steel(2), ocean(steel(2)), blank(), ocean(card(1)), ocean(blank())},
@@ -83,5 +87,4 @@ public class StandardBoard {
             }
         }
     }
-
 }

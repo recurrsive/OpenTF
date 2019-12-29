@@ -1,5 +1,20 @@
-.gradle
-.idea/workspace.xml
+.DS_Store
+.classpath
+.gradle/
+.mvn/
+.project/
+.settings/
 out/
-.idea/pants.xml
-.idea/.name
+.idea/workspace.xml
+bin/
+
+# Gradle
+.idea/**/gradle.xml
+.idea/**/libraries
+
+# User-specific stuff
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf

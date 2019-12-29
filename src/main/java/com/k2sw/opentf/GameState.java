@@ -126,6 +126,18 @@ public class GameState {
                 '}';
     }
 
+    public VisibleTile[][] getVisible() {
+        VisibleTile[][] result = new VisibleTile[standardBoard.getHeight()][];
+        for (int i=0; i < standardBoard.getHeight(); i++) {
+            result[i] = new VisibleTile[standardBoard.getWidth(i)];
+            for (int j=0; j < standardBoard.getWidth(i); j++) {
+                TileSlot slot = standardBoard.at(i, j);
+                result[i][j] = new VisibleTile(slot.getTileSlotType(), slot.getBonuses(), placedTiles.getOrDefault(slot, null), i, j);
+            }
+        }
+        return result;
+    }
+
     public void save(Path path) throws IOException {
         JSONObject outer = new JSONObject();
         for (TileSlot slot : standardBoard.getAllSlots()) {
