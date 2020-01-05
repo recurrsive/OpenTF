@@ -1,6 +1,10 @@
 package com.k2sw.opentf;
 
-public interface Reducer {
-    int reduceCost(CardTag[] tags, boolean genericProject, int amount);
-    Requirement changeRequirement(Requirement req);
+public abstract class Reducer {
+    public abstract int reduceCost(CardTag[] tags, boolean genericProject, int amount);
+    public abstract Requirement changeRequirement(Requirement req);
+
+    public String getText() {
+        return "Reduces the cost of various projects.";
+    }
 }

@@ -3,7 +3,7 @@ package com.k2sw.opentf.effects;
 import com.k2sw.opentf.*;
 import java.util.*;
 
-public class SellPatentsEffect implements Effect {
+public class SellPatentsEffect extends Effect {
     @Override
     public GameState[] apply(GameStateBuilder state, PlayerID currentPlayer) {
         Set<Card> handSet = state.getPlayerByID(currentPlayer).getHand();

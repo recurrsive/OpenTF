@@ -2,7 +2,7 @@ package com.k2sw.opentf.effects;
 
 import com.k2sw.opentf.*;
 
-public class DecreaseAmountEffect implements Effect {
+public class DecreaseAmountEffect extends Effect {
     private ResourceType type;
     private int amount;
 
@@ -16,5 +16,10 @@ public class DecreaseAmountEffect implements Effect {
 
         if (state.getPlayerByID(currentPlayer).getAmounts().get(type) < 0) return new GameState[0];
         return new GameState[]{state.build()};
+    }
+
+    @Override
+    public String getText() {
+        return "Costs " + amount + " " + type + " resources(s).";
     }
 }

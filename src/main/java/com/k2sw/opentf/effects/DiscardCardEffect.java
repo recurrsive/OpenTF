@@ -3,7 +3,7 @@ package com.k2sw.opentf.effects;
 import com.k2sw.opentf.*;
 import java.util.*;
 
-public class DiscardCardEffect implements Effect {
+public class DiscardCardEffect extends Effect {
     private Card card;
 
     public DiscardCardEffect(Card card) {
@@ -15,5 +15,10 @@ public class DiscardCardEffect implements Effect {
         state.addToDiscard(card);
         state.getPlayerByID(currentPlayer).getHand().remove(card);
         return new GameState[]{state.build()};
+    }
+
+    @Override
+    public String getText() {
+        return "Discard a card.";
     }
 }

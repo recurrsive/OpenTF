@@ -2,7 +2,7 @@ package com.k2sw.opentf.effects;
 
 import com.k2sw.opentf.*;
 
-public class RemoveCountersFromThisCardEffect implements Effect {
+public class RemoveCountersFromThisCardEffect extends Effect {
     private String name;
     private int amount;
 
@@ -17,5 +17,10 @@ public class RemoveCountersFromThisCardEffect implements Effect {
         if (cardState.getCounters() < amount) return new GameState[0];
         cardState.withCounters(cardState.getCounters()-amount);
         return new GameState[]{state.build()};
+    }
+
+    @Override
+    public String getText() {
+        return "Remove " + amount + " resource(s) from this card.";
     }
 }

@@ -5,7 +5,7 @@ import com.k2sw.opentf.GameState;
 import com.k2sw.opentf.GameStateBuilder;
 import com.k2sw.opentf.PlayerID;
 
-public class PassEffect implements Effect {
+public class PassEffect extends Effect {
     public PassEffect() {}
 
     @Override

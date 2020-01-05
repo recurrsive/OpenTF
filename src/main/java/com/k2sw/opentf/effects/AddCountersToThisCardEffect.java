@@ -4,7 +4,7 @@ import com.k2sw.opentf.*;
 
 import java.util.ArrayList;
 
-public class AddCountersToThisCardEffect implements Effect {
+public class AddCountersToThisCardEffect extends Effect {
     private String name;
     private int amount;
 
@@ -18,5 +18,10 @@ public class AddCountersToThisCardEffect implements Effect {
         CardStateBuilder cardState = state.getPlayerByID(currentPlayer).findCard(name);
         cardState.withCounters(cardState.getCounters()+amount);
         return new GameState[]{state.build()};
+    }
+
+    @Override
+    public String getText() {
+        return "Add " + amount + " counter(s) to this card.";
     }
 }

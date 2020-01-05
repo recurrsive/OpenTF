@@ -4,7 +4,7 @@ import com.k2sw.opentf.*;
 
 import java.util.*;
 
-public class DrawCardEffect implements Effect {
+public class DrawCardEffect extends Effect {
     @Override
     public GameState[] apply(GameStateBuilder state, PlayerID currentPlayer) {
         List<Card> deck = state.getDeck();
@@ -20,5 +20,10 @@ public class DrawCardEffect implements Effect {
             state.getDeck().remove(0);
             return new GameState[]{state.build()};
         }
+    }
+
+    @Override
+    public String getText() {
+        return "Draw a card.";
     }
 }

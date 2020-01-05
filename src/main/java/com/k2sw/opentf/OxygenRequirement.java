@@ -1,6 +1,6 @@
 package com.k2sw.opentf;
 
-public class OxygenRequirement implements Requirement {
+public class OxygenRequirement extends Requirement {
     private int amount;
     private boolean greater;
 
@@ -23,5 +23,15 @@ public class OxygenRequirement implements Requirement {
             return state.getOxygen() >= amount;
         else
             return state.getOxygen() <= amount;
+    }
+
+    @Override
+    public String getText() {
+        if (greater) {
+            return "At least " + amount + "% oxygen.";
+        }
+        else {
+            return "At most " + amount + "% oxygen.";
+        }
     }
 }

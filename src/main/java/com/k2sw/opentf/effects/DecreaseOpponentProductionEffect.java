@@ -4,7 +4,7 @@ import com.k2sw.opentf.*;
 
 import java.util.ArrayList;
 
-public class DecreaseOpponentProductionEffect implements Effect {
+public class DecreaseOpponentProductionEffect extends Effect {
     private ResourceType type;
     private int amount;
 
@@ -30,5 +30,10 @@ public class DecreaseOpponentProductionEffect implements Effect {
         GameState[] results = new GameState[resultList.size()];
         resultList.toArray(results);
         return results;
+    }
+
+    @Override
+    public String getText() {
+        return "Remove " + amount + " " + type + " production from your opponent.";
     }
 }

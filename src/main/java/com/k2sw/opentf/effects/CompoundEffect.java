@@ -8,7 +8,7 @@ import com.k2sw.opentf.PlayerID;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class CompoundEffect implements Effect {
+public class CompoundEffect extends Effect {
     private Effect[] effects;
 
     public CompoundEffect(Effect[] effects) {
@@ -28,5 +28,17 @@ public class CompoundEffect implements Effect {
             next_states.toArray(results);
         }
         return results;
+    }
+
+    @Override
+    public String getText() {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < effects.length; ++i) {
+            result.append(effects[i].getText());
+            if (i != effects.length - 1) {
+                result.append("\n");
+            }
+        }
+        return result.toString();
     }
 }

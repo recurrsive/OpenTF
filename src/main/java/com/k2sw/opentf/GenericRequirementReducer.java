@@ -1,6 +1,6 @@
 package com.k2sw.opentf;
 
-public class GenericRequirementReducer implements Reducer {
+public class GenericRequirementReducer extends Reducer {
     private int discount;
 
     public GenericRequirementReducer(int discount) {
@@ -33,5 +33,10 @@ public class GenericRequirementReducer implements Reducer {
                 return new OceanRequirement(((OceanRequirement) req).getAmount() + discount, false);
         }
         else return req;
+    }
+
+    @Override
+    public String getText() {
+        return "Allows you to play cards with global requirements " + discount + " steps higher or lower than you normally could.";
     }
 }

@@ -35,4 +35,18 @@ public class EffectHelpers {
         }
         return results;
     }
+
+    public static int reduceCost(int cost, boolean isStandardProject, CardTag[] tags,
+                                  GameStateBuilder state, PlayerID currentPlayer) {
+        int finalCost = cost;
+        for (CardStateBuilder card : state.getPlayerByID(currentPlayer).getTableau()) {
+            finalCost = card.getCard().getReducer().reduceCost(tags, isStandardProject, finalCost);
+        }
+        if (finalCost < 0) {
+            return 0;
+        }
+        else {
+            return finalCost;
+        }
+    }
 }

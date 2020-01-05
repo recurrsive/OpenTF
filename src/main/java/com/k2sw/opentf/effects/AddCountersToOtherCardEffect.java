@@ -4,7 +4,7 @@ import com.k2sw.opentf.*;
 
 import java.util.*;
 
-public class AddCountersToOtherCardEffect implements Effect {
+public class AddCountersToOtherCardEffect extends Effect {
     private CardTag[] tags;
     private int amount;
 
@@ -36,5 +36,18 @@ public class AddCountersToOtherCardEffect implements Effect {
         resultList.toArray(results);
         if (results.length == 0) return new GameState[]{state.build()};
         else return results;
+    }
+
+    @Override
+    public String getText() {
+        StringBuilder result = new StringBuilder();
+        result.append("Add " + amount + " counters to a card with one of these tags:\n");
+        for (int i = 0; i < tags.length; ++i) {
+            result.append(tags[i].toString());
+            if (i < tags.length - 1) {
+                result.append(", ");
+            }
+        }
+        return result.toString();
     }
 }

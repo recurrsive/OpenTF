@@ -16,13 +16,23 @@ public class GreetingController {
 	private final AtomicLong counter = new AtomicLong();
 
 	@RequestMapping("/greeting")
-	public VisibleTile[][] greeting(@RequestParam(value="name", defaultValue="World") String name) {
+	public VisibleGameState greeting(@RequestParam(value="name", defaultValue="World") String name) {
 		PlayerID id = new PlayerID(0);
 		PlayerBuilder player = new PlayerBuilder().withPlayerID(id).withAmount(ResourceType.MegaCredits, 25);
 		player.getHand().add(StandardCards.giantIceAsteroid);
+		player.getHand().add(StandardCards.birds);
+		CardStateBuilder[] tableau = {
+						new CardStateBuilder(new CardState(StandardCards.largeConvoy, 0, false)),
+						new CardStateBuilder(new CardState(StandardCards.aquiferPumping, 0, true)),
+						new CardStateBuilder(new CardState(StandardCards.ants, 5, false)),
+						new CardStateBuilder(new CardState(StandardCards.ganymedeColony, 0, false)),
+						new CardStateBuilder(new CardState(StandardCards.beamFromAThoriumAsteroid, 0, false)),
+						new CardStateBuilder(new CardState(StandardCards.searchForLife, 0, false)),
+		};
+		player.withTableau(tableau);
 		StandardBoard board = new StandardBoard();
 		GameStateBuilder builder = new GameStateBuilder()
-				.withPlayers(new PlayerBuilder[]{player}).withTemperature(0).withOxygen(0);
+				.withPlayers(new PlayerBuilder[]{player}).withTemperature(0).withOxygen(9);
 		Map<TileSlot, Tile> placed = new HashMap<>();
 		placed.put(builder.getStandardBoard().at(2, 2), new Tile(id, TileType.Plants));
 		return builder.withPlacedTiles(placed).build().getVisible();

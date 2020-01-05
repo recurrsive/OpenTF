@@ -5,7 +5,7 @@ import com.k2sw.opentf.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class PayForCostEffect implements Effect {
+public class PayForCostEffect extends Effect {
     private int cost;
     private boolean isStandardProject;
     private CardTag[] tags;
@@ -17,10 +17,7 @@ public class PayForCostEffect implements Effect {
     }
 
     public GameState[] apply(GameStateBuilder state, PlayerID currentPlayer) {
-        int initialCost = cost;
-        for (CardStateBuilder cardState : state.getPlayerByID(currentPlayer).getTableau()){
-            initialCost = cardState.getCard().getReducer().reduceCost(tags, isStandardProject, initialCost);
-        }
+        int initialCost = EffectHelpers.reduceCost(cost, isStandardProject, tags, state, currentPlayer);
 
         ArrayList<CardTag> tagList = new ArrayList<>();
         Collections.addAll(tagList, tags);
@@ -54,5 +51,20 @@ public class PayForCostEffect implements Effect {
         GameState[] results = new GameState[resultList.size()];
         resultList.toArray(results);
         return results;
+    }
+
+    @Override
+    public String getText() {
+        StringBuilder result = new StringBuilder();
+        result.append("Costs " + cost + " mega credits.");
+        ArrayList<CardTag> tagList = new ArrayList<>();
+        Collections.addAll(tagList, tags);
+        if (tagList.contains(CardTag.Steel)) {
+            result.append(" Steel may be used.");
+        }
+        if (tagList.contains(CardTag.Space)) {
+            result.append(" Titanium may be used.");
+        }
+        return result.toString();
     }
 }

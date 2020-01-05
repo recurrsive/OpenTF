@@ -3,7 +3,7 @@ package com.k2sw.opentf.effects;
 import com.k2sw.opentf.*;
 import java.util.*;
 
-public class UseTableauActionEffect implements Effect {
+public class UseTableauActionEffect extends Effect {
     private String cardName;
 
     public UseTableauActionEffect(String cardName) {
