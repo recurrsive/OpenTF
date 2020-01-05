@@ -4,7 +4,7 @@ import com.k2sw.opentf.*;
 
 import java.util.*;
 
-public class VariableConvertProductionEffect implements Effect {
+public class VariableConvertProductionEffect extends Effect {
     private ResourceType lostType;
     private ResourceType gainedType;
 
@@ -26,5 +26,10 @@ public class VariableConvertProductionEffect implements Effect {
         Effect[] effects = new Effect[effectList.size()];
         effectList.toArray(effects);
         return new OrEffect(effects).apply(state, currentPlayer);
+    }
+
+    @Override
+    public String getText() {
+        return "Convert any amount of " + lostType + " production into " + gainedType + " production.";
     }
 }

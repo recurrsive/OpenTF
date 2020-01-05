@@ -1,6 +1,6 @@
 package com.k2sw.opentf;
 
-public class TagRestrictedCostReducer implements Reducer {
+public class TagRestrictedCostReducer extends Reducer {
     private CardTag tag;
     private int discount;
 
@@ -22,5 +22,10 @@ public class TagRestrictedCostReducer implements Reducer {
     @Override
     public Requirement changeRequirement(Requirement req) {
         return req;
+    }
+
+    @Override
+    public String getText() {
+        return "Reduces the cost of cards with a " + tag + " tag by " + discount + ".";
     }
 }

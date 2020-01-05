@@ -2,7 +2,7 @@ package com.k2sw.opentf.effects;
 
 import com.k2sw.opentf.*;
 
-public class AddCountersToThisCardPerTagEffect implements Effect {
+public class AddCountersToThisCardPerTagEffect extends Effect {
     private String name;
     private CardTag[] tags;
 
@@ -23,5 +23,16 @@ public class AddCountersToThisCardPerTagEffect implements Effect {
         CardStateBuilder cardState = state.getPlayerByID(currentPlayer).findCard(name);
         cardState.withCounters(cardState.getCounters()+amount);
         return new GameState[]{state.build()};
+    }
+
+    @Override
+    public String getText() {
+        StringBuilder result = new StringBuilder();
+        result.append("Add 1 counter to this card per tag for each of these tags:\n");
+        for (CardTag tag : tags) {
+            result.append(tag.toString());
+            result.append(", ");
+        }
+        return result.toString();
     }
 }

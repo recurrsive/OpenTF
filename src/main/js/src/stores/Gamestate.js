@@ -18,6 +18,7 @@ export const boardReducer = stateActionMap({
 
 export const fetchBoardSuccess = gamestate => ({type: Actions.FETCH_GAME_STATE_SUCCESS, gamestate: gamestate})
 
+/*
 const exCard1 = {
   name: "Test card with a long name",
   cost: 26,
@@ -70,13 +71,8 @@ const exPlayers = [{
   score: 27,
   tableau: [exCard1, exCard2],
   hand: [exCard3, exCard4, exCard5]
-}]
+}]*/
 
 export const fetchBoard = (dispatch) => {
-  fetchJson('/greeting').then(result => dispatch(fetchBoardSuccess(
-      {
-        players: exPlayers,
-        active: 0,
-        board: result
-      })))
+  fetchJson('/greeting').then(result => dispatch(fetchBoardSuccess(result)))
 }

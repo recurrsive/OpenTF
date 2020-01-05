@@ -8,34 +8,39 @@ class CardDisplay extends Component {
 
     return (
         <div className="col col-2">
-          <div className="card">
-            <div className="card-header">{this.formatName(card.name)}
-              <span className="cardcost">{this.formatCost(card.cost)}</span>
-              {this.props.displayReq ? this.formatRequirement(card.requirement) : <span/>}
+          <div className="card" style={{border: "2px solid " + CardDisplay.formatBorder(card)}}>
+            <div className="card-header">{CardDisplay.formatName(card.name)}
+              <span className="cardcost">{CardDisplay.formatCost(card.cost, this.props.inHand, this.props.resources)}</span>
+              {this.props.displayReq ? CardDisplay.formatRequirement(card) : <span/>}
             </div>
-            <div className="card-body">{this.tagImages(card.tags)}{this.formatResources(card)}</div>
-            <div className="card-body">{card.text}</div>
+            <div className="card-body">{CardDisplay.tagImages(card.tags)}{CardDisplay.formatResources(card)}</div>
+            <div className="card-body">{CardDisplay.formatText(card.text)}</div>
           </div>
         </div>
     )
   }
 
-  formatName(name) {
+  static formatText(text) {
+    const sentences = text.split("\n")
+    return sentences.map(sentence => <span>{sentence}<br/></span>)
+  }
+
+  static formatName(name) {
     if (!name) return ""
     if (name.length > 17) {
-      return <span className="cardname">{name.substring(0, 16) + (name.charAt(16) === ' ' ? '' : name.charAt(16))}
+      return <span className="cardname">{name.substring(0, 13) + (name.charAt(13) === ' ' ? '' : name.charAt(13))}
         <span className="ellipsis">...</span></span>
     }
     else {
-      return <span className="cardname-spaced" style={{"paddingRight": "" + (20-name.length)*7 + "px"}}>{name}</span>
+      return <span className="cardname-spaced" style={{"paddingRight": "" + (17-name.length)*7 + "px"}}>{name}</span>
     }
   }
 
-  formatCost(cost) {
-    if (!this.props.inHand) {
+  static formatCost(cost, inHand, resources) {
+    if (!inHand) {
       return <span className="cost-neutral">{cost}</span>
     }
-    else if (!this.props.resources || this.props.resources.mc.amount < cost) {
+    else if (!resources || resources.mc.amount < cost) {
       return <span className="cost-unaffordable">{cost}</span>
     }
     else {
@@ -43,23 +48,31 @@ class CardDisplay extends Component {
     }
   }
 
-  tagImages(tags) {
+  static tagImages(tags) {
     return tags.map(tag => <img src={URLMap.mapTag(tag)} width="20px" height="20px"/>)
   }
 
-  formatRequirement(req) {
-    if (!req) return null
+  static formatRequirement(card) {
+    if (!card || !card.requirement) return null
+    if (!card.requirementsMet) {
+      return (
+          <span>
+            <br/>
+            <span style={{color: "red"}}>Needs: {card.requirement}</span>
+          </span>
+      )
+    }
     return (
         <span>
           <br/>
           <span style={{color: "gray"}}>Needs: </span>
-          <span style={{"font-style": "italic", color: "gray"}}>{req}</span>
+          <span style={{"font-style": "italic", color: "gray"}}>{card.requirement}</span>
         </span>
     )
   }
 
-  formatResources(card) {
-    if (this.props.inHand || !card.resource_name) return <span/>
+  static formatResources(card, inHand) {
+    if (inHand || !card.resource_name) return <span/>
     return (
         <span>
           <br/>
@@ -67,6 +80,19 @@ class CardDisplay extends Component {
           <span style={{color: "blue"}}>{card.resource_count}</span>
         </span>
     )
+  }
+
+  static formatBorder(card) {
+    if (card.tags.filter(t => t === "Event").length > 0) {
+      return "orange"
+    }
+    else if (card.text.includes("ACTION") || card.text.includes("WHEN")
+        || card.text.includes("cost") || card.text.includes("could")) {
+      return "blue"
+    }
+    else {
+      return "green"
+    }
   }
 }
 

@@ -4,7 +4,7 @@ import com.k2sw.opentf.*;
 
 import java.util.*;
 
-public class RemoveCountersFromOtherCardEffect implements Effect {
+public class RemoveCountersFromOtherCardEffect extends Effect {
     String name;
     private CardTag[] types;
     private int amount;
@@ -48,5 +48,18 @@ public class RemoveCountersFromOtherCardEffect implements Effect {
         resultList.toArray(results);
         if (results.length == 0) return new GameState[0];
         return results;
+    }
+
+    @Override
+    public String getText() {
+        StringBuilder result = new StringBuilder();
+        result.append("Remove " + amount + " counters from a card with one of these tags:\n");
+        for (int i = 0; i < types.length; ++i) {
+            result.append(types[i].toString());
+            if (i < types.length - 1) {
+                result.append(", ");
+            }
+        }
+        return result.toString();
     }
 }

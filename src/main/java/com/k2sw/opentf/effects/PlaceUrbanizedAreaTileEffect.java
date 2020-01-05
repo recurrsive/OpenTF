@@ -3,7 +3,7 @@ package com.k2sw.opentf.effects;
 import com.k2sw.opentf.*;
 import java.util.*;
 
-public class PlaceUrbanizedAreaTileEffect implements Effect {
+public class PlaceUrbanizedAreaTileEffect extends Effect {
     @Override
     public GameState[] apply(GameStateBuilder state, PlayerID currentPlayer) {
         Set<TileSlot> unplaced = new HashSet<>(state.getTileSlotsByType(TileSlotType.Desert));
@@ -22,5 +22,10 @@ public class PlaceUrbanizedAreaTileEffect implements Effect {
         GameState[] results = EffectHelpers.permuteTiles(initialState, currentPlayer, availableSlots, TileType.City);
         if (results.length == 0) return new GameState[0];
         else return GameStateFunctions.triggerSearch(new TriggerType[]{TriggerType.CityPlaced}, results, currentPlayer);
+    }
+
+    @Override
+    public String getText() {
+        return "Place a city tile between two other city tiles.";
     }
 }

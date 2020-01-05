@@ -1,6 +1,6 @@
 package com.k2sw.opentf;
 
-public class OceanRequirement implements Requirement {
+public class OceanRequirement extends Requirement {
     private int amount;
     private boolean greater;
 
@@ -27,5 +27,15 @@ public class OceanRequirement implements Requirement {
             return oceanCount >= amount;
         else
             return oceanCount <= amount;
+    }
+
+    @Override
+    public String getText() {
+        if (greater) {
+            return "At least " + amount + " oceans.";
+        }
+        else {
+            return "At most " + amount + " oceans.";
+        }
     }
 }

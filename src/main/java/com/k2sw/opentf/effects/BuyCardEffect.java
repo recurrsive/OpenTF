@@ -4,7 +4,7 @@ import com.k2sw.opentf.*;
 
 import java.util.*;
 
-public class BuyCardEffect implements Effect {
+public class BuyCardEffect extends Effect {
     @Override
     public GameState[] apply(GameStateBuilder state, PlayerID currentPlayer) {
         List<Card> deck = state.getDeck();
@@ -20,5 +20,10 @@ public class BuyCardEffect implements Effect {
                     new DiscardTopCardEffect()
             }).apply(state, currentPlayer);
         }
+    }
+
+    @Override
+    public String getText() {
+        return "May buy the top card of the deck.";
     }
 }

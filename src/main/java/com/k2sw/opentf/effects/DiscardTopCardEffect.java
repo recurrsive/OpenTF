@@ -2,7 +2,7 @@ package com.k2sw.opentf.effects;
 
 import com.k2sw.opentf.*;
 
-public class DiscardTopCardEffect implements Effect {
+public class DiscardTopCardEffect extends Effect {
     @Override
     public GameState[] apply(GameStateBuilder state, PlayerID currentPlayer) {
         state.addToDiscard(state.getDeck().get(0));

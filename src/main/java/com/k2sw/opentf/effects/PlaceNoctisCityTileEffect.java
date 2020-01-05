@@ -4,7 +4,7 @@ import com.k2sw.opentf.*;
 
 import java.util.*;
 
-public class PlaceNoctisCityTileEffect implements Effect {
+public class PlaceNoctisCityTileEffect extends Effect {
     @Override
     public GameState[] apply(GameStateBuilder state, PlayerID currentPlayer) {
         Set<TileSlot> unplaced = new HashSet<>(state.getTileSlotsByType(TileSlotType.Noctis));
@@ -17,5 +17,10 @@ public class PlaceNoctisCityTileEffect implements Effect {
             state = new GameStateBuilder(GameStateFunctions.getResources(state, currentPlayer, bonus));
         }
         return GameStateFunctions.triggerSearch(new TriggerType[]{TriggerType.CityPlaced}, new GameState[]{GameStateFunctions.getMCFromAdjacent(state, currentPlayer, slot)}, currentPlayer);
+    }
+
+    @Override
+    public String getText() {
+        return "Place a city tile on the reserved space.";
     }
 }

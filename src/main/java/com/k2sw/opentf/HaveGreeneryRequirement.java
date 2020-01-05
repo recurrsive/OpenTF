@@ -2,7 +2,7 @@ package com.k2sw.opentf;
 
 import java.util.*;
 
-public class HaveGreeneryRequirement implements Requirement {
+public class HaveGreeneryRequirement extends Requirement {
     @Override
     public boolean check(GameStateBuilder state, PlayerID currentPlayer) {
         Map<TileSlot, Tile> placed = state.getPlacedTiles();
@@ -11,5 +11,10 @@ public class HaveGreeneryRequirement implements Requirement {
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public String getText() {
+        return "Have a greenery.";
     }
 }

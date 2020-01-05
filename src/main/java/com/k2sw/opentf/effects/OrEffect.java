@@ -7,7 +7,7 @@ import com.k2sw.opentf.PlayerID;
 
 import java.util.*;
 
-public class OrEffect implements Effect {
+public class OrEffect extends Effect {
     private Effect[] effects;
 
     public OrEffect(Effect[] effects) {
@@ -25,5 +25,17 @@ public class OrEffect implements Effect {
         GameState[] results = new GameState[resultList.size()];
         resultList.toArray(results);
         return results;
+    }
+
+    @Override
+    public String getText() {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < effects.length; ++i) {
+            result.append(effects[i].getText());
+            if (i != effects.length - 1) {
+                result.append("\n -OR- ");
+            }
+        }
+        return result.toString();
     }
 }

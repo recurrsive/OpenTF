@@ -3,7 +3,7 @@ package com.k2sw.opentf.effects;
 import com.k2sw.opentf.*;
 import java.util.*;
 
-public class PlayCardEffect implements Effect {
+public class PlayCardEffect extends Effect {
     private Card card;
 
     public PlayCardEffect(Card card) {

@@ -1,6 +1,6 @@
 package com.k2sw.opentf;
 
-public class TemperatureRequirement implements Requirement {
+public class TemperatureRequirement extends Requirement {
     private int amount;
     private boolean greater;
 
@@ -23,5 +23,15 @@ public class TemperatureRequirement implements Requirement {
             return state.getTemperature() >= amount;
         else
             return state.getTemperature() <= amount;
+    }
+
+    @Override
+    public String getText() {
+        if (greater) {
+            return "At least " + amount + " degrees.";
+        }
+        else {
+            return "At most " + amount + " degrees.";
+        }
     }
 }

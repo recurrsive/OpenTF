@@ -1,6 +1,6 @@
 package com.k2sw.opentf;
 
-public class GenericCardCostReducer implements Reducer {
+public class GenericCardCostReducer extends Reducer {
     private int discount;
 
     public GenericCardCostReducer(int discount) {
@@ -16,5 +16,10 @@ public class GenericCardCostReducer implements Reducer {
     @Override
     public Requirement changeRequirement(Requirement req) {
         return req;
+    }
+
+    @Override
+    public String getText() {
+        return "Reduces the cost of each card you play by " + discount + ".";
     }
 }

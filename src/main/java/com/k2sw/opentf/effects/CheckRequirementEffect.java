@@ -2,7 +2,7 @@ package com.k2sw.opentf.effects;
 
 import com.k2sw.opentf.*;
 
-public class CheckRequirementEffect implements Effect {
+public class CheckRequirementEffect extends Effect {
     private Requirement req;
 
     public CheckRequirementEffect(Requirement req) {

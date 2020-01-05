@@ -60,3 +60,15 @@
 .cardname {
     padding-right: 10px
 }
+
+.style-event {
+    border: 2px solid red
+}
+
+.style-active {
+    border: 2px solid blue
+}
+
+.style-project {
+    border: 2px solid green
+}

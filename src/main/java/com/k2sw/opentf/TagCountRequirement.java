@@ -1,6 +1,6 @@
 package com.k2sw.opentf;
 
-public class TagCountRequirement implements Requirement {
+public class TagCountRequirement extends Requirement {
     private CardTag tag;
     private int count;
 
@@ -12,5 +12,10 @@ public class TagCountRequirement implements Requirement {
     @Override
     public boolean check(GameStateBuilder state, PlayerID currentPlayer) {
         return state.getPlayerByID(currentPlayer).getTagCount(tag) >= count;
+    }
+
+    @Override
+    public String getText() {
+        return "At least " + count + " " + tag.toString() + " tags.";
     }
 }

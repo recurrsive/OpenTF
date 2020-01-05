@@ -5,7 +5,7 @@ import com.k2sw.opentf.*;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PlaceOceanTileEffect implements Effect {
+public class PlaceOceanTileEffect extends Effect {
 
     @Override
     public GameState[] apply(GameStateBuilder state, PlayerID currentPlayer) {
@@ -31,5 +31,10 @@ public class PlaceOceanTileEffect implements Effect {
             else
                 return GameStateFunctions.triggerSearch(new TriggerType[]{TriggerType.OceanPlaced}, results, currentPlayer);
         }
+    }
+
+    @Override
+    public String getText() {
+        return "Place an ocean tile.";
     }
 }

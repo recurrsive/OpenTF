@@ -1,5 +1,9 @@
 package com.k2sw.opentf;
 
-public interface Requirement {
-    boolean check(GameStateBuilder state, PlayerID currentPlayer);
+public abstract class Requirement {
+    public abstract boolean check(GameStateBuilder state, PlayerID currentPlayer);
+
+    public String getText() {
+        return "A requirement.";
+    }
 }

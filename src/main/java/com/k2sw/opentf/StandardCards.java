@@ -154,14 +154,7 @@ public class StandardCards {
 
     public static Card researchOutpost = new Card("Research Outpost", 18, CardType.Event,
             new CardTag[]{CardTag.City, CardTag.Steel}, Global.NO_REQUIREMENT,
-            new CompoundEffect(new Effect[]{
-                    new PlaceOceanTileEffect(),
-                    new OrEffect(new Effect[]{
-                            new IncreaseAmountEffect(ResourceType.Plants, 3),
-                            new AddCountersToOtherCardEffect(new CardTag[]{CardTag.Microbes}, 3),
-                            new AddCountersToOtherCardEffect(new CardTag[]{CardTag.Animals}, 2),
-                    })
-            }),
+            new PlaceCityTileEffect(),
             Global.NULL_EFFECT,
             Global.NULL_EFFECT,
             new TriggerType[0],
@@ -569,11 +562,11 @@ public class StandardCards {
 
     public static Card ants = new Card("Ants", 9, CardType.Active,
             new CardTag[]{CardTag.Microbes, CardTag.UsesCounters}, new OxygenRequirement(4, true),
+            Global.NULL_EFFECT,
             new CompoundEffect(new Effect[]{
                     new RemoveCountersFromOtherCardEffect("Ants", new CardTag[]{CardTag.Microbes}, 1),
                     new AddCountersToThisCardEffect("Ants", 1)
             }),
-            Global.NULL_EFFECT,
             Global.NULL_EFFECT,
             new TriggerType[0],
             new PointsPerCounterScorer("Ants", 1, 2),
@@ -800,9 +793,7 @@ public class StandardCards {
 
     public static Card ganymedeColony = new Card("Ganymede Colony", 20, CardType.Auto,
             new CardTag[]{CardTag.Jovian, CardTag.City, CardTag.Space}, Global.NO_REQUIREMENT,
-            new CompoundEffect(new Effect[]{
-                    new PlaceOffBoardCityEffect()
-            }),
+            new PlaceOffBoardCityEffect(),
             Global.NULL_EFFECT,
             Global.NULL_EFFECT,
             new TriggerType[0],
@@ -1443,11 +1434,11 @@ public class StandardCards {
 
     public static Card aquiferPumping = new Card("Aquifer Pumping", 18, CardType.Auto,
             new CardTag[]{CardTag.Steel}, Global.NO_REQUIREMENT,
+            Global.NULL_EFFECT,
             new CompoundEffect(new Effect[]{
                     new PayForCostEffect(new CardTag[]{CardTag.Steel}, false, 8),
                     new PlaceOceanTileEffect()
             }),
-            Global.NULL_EFFECT,
             Global.NULL_EFFECT,
             new TriggerType[0],
             Global.ZERO_SCORER,

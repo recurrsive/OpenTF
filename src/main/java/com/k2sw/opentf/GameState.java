@@ -126,7 +126,7 @@ public class GameState {
                 '}';
     }
 
-    public VisibleTile[][] getVisible() {
+    public VisibleTile[][] getVisibleTiles() {
         VisibleTile[][] result = new VisibleTile[standardBoard.getHeight()][];
         for (int i=0; i < standardBoard.getHeight(); i++) {
             result[i] = new VisibleTile[standardBoard.getWidth(i)];
@@ -136,6 +136,119 @@ public class GameState {
             }
         }
         return result;
+    }
+
+    private String cardText(Card c) {
+        StringBuilder text = new StringBuilder();
+        if (!c.getPlayEffect().equals(Global.NULL_EFFECT)) {
+            text.append(c.getPlayEffect().getText());
+        }
+        if (!c.getActionEffect().equals(Global.NULL_EFFECT)) {
+            text.append("\nACTION:\n");
+            text.append(c.getActionEffect().getText());
+        }
+        if (!c.getTriggeredEffect().equals(Global.NULL_EFFECT)) {
+            text.append("\nWHEN ");
+            for (int i = 0; i < c.getTriggerTypes().length; ++i) {
+                text.append(c.getTriggerTypes()[i].toString());
+                if (i < c.getTriggerTypes().length - 1) {
+                    text.append(" OR ");
+                }
+                else {
+                    text.append(":\n");
+                }
+            }
+            text.append(c.getTriggeredEffect());
+        }
+        if (!c.getReducer().equals(Global.NO_REDUCER)) {
+            text.append("\n");
+            text.append(c.getReducer().getText());
+        }
+        return text.toString();
+    }
+
+    private boolean requirementsMet(Card card, GameState state, PlayerID id) {
+        GameStateBuilder builder = new GameStateBuilder(state);
+        return card.getRequirement().check(builder, id);
+    }
+
+    private VisibleCard[] getVisibleHand(PlayerID id) {
+        ArrayList<VisibleCard> result = new ArrayList<>();
+        for (Card c : getPlayerByID(id).getHand()) {
+            ArrayList<String> tags = new ArrayList<>();
+            for (CardTag tag : c.getTags()) {
+                tags.add(tag.toString());
+            }
+            String[] stags = new String[tags.size()];
+            tags.toArray(stags);
+
+            VisibleCard card = new VisibleCard(c.getName(), EffectHelpers.reduceCost(c.getCost(), false, c.getTags(), new GameStateBuilder(this), id), 0, c.getRequirement().getText(),
+                    stags, cardText(c), requirementsMet(c, this, id), false);
+            result.add(card);
+        }
+        VisibleCard[] cards = new VisibleCard[result.size()];
+        result.toArray(cards);
+
+        return cards;
+    }
+
+    private VisibleCard[] getVisibleTableau(PlayerID id) {
+        ArrayList<VisibleCard> result = new ArrayList<>();
+        for (CardState cs : getPlayerByID(id).getTableau()) {
+            Card c = cs.getCard();
+
+            ArrayList<String> tags = new ArrayList<>();
+            for (CardTag tag : c.getTags()) {
+                tags.add(tag.toString());
+            }
+            String[] stags = new String[tags.size()];
+            tags.toArray(stags);
+
+            VisibleCard card = new VisibleCard(c.getName(), EffectHelpers.reduceCost(c.getCost(), false, c.getTags(), new GameStateBuilder(this), id), cs.getCounters(), c.getRequirement().getText(),
+                    stags, cardText(c), requirementsMet(c, this, id), cs.isActivated());
+            result.add(card);
+        }
+        VisibleCard[] cards = new VisibleCard[result.size()];
+        result.toArray(cards);
+
+        return cards;
+    }
+
+    private VisibleResources getVisibleResources(PlayerID id) {
+        Player player = getPlayerByID(id);
+        int score = player.getTerraformingScore();
+        VisibleResource mc = new VisibleResource(player.getAmounts().get(ResourceType.MegaCredits),
+                player.getProduction().get(ResourceType.MegaCredits));
+        VisibleResource steel = new VisibleResource(player.getAmounts().get(ResourceType.Steel),
+                player.getProduction().get(ResourceType.Steel));
+        VisibleResource titanium = new VisibleResource(player.getAmounts().get(ResourceType.Titanium),
+                player.getProduction().get(ResourceType.Titanium));
+        VisibleResource plants = new VisibleResource(player.getAmounts().get(ResourceType.Plants),
+                player.getProduction().get(ResourceType.Plants));
+        VisibleResource energy = new VisibleResource(player.getAmounts().get(ResourceType.Energy),
+                player.getProduction().get(ResourceType.Energy));
+        VisibleResource heat = new VisibleResource(player.getAmounts().get(ResourceType.Heat),
+                player.getProduction().get(ResourceType.Heat));
+
+        return new VisibleResources(score, mc, steel, titanium, plants, energy, heat);
+    }
+
+    private VisiblePlayer[] getVisiblePlayers() {
+        ArrayList<VisiblePlayer> result = new ArrayList<>();
+        for (Player p : players) {
+            PlayerID id = p.getPlayerID();
+            result.add(new VisiblePlayer(id.getId(), getVisibleHand(id),
+                    getVisibleTableau(id), getVisibleResources(id)));
+        }
+        VisiblePlayer[] players = new VisiblePlayer[result.size()];
+        result.toArray(players);
+
+        return players;
+    }
+
+    public VisibleGameState getVisible() {
+        int active = 0;
+        return new VisibleGameState(getVisiblePlayers(), active, getVisibleTiles());
     }
 
     public void save(Path path) throws IOException {

@@ -3,7 +3,7 @@ package com.k2sw.opentf.effects;
 import com.k2sw.opentf.*;
 import java.util.*;
 
-public class PlaceMangrovePlantTileEffect implements Effect {
+public class PlaceMangrovePlantTileEffect extends Effect {
     @Override
     public GameState[] apply(GameStateBuilder state, PlayerID currentPlayer) {
         Set<TileSlot> unplaced = new HashSet<>(state.getTileSlotsByType(TileSlotType.Ocean));
@@ -21,5 +21,10 @@ public class PlaceMangrovePlantTileEffect implements Effect {
         }
         if (results.length == 0) return new GameState[]{state.build()};
         else return GameStateFunctions.triggerSearch(new TriggerType[]{TriggerType.PlantsPlaced}, results, currentPlayer);
+    }
+
+    @Override
+    public String getText() {
+        return "Place a greenery tile on a spot reserved for an ocean.";
     }
 }

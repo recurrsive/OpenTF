@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class PlaceCityTileEffect implements Effect {
+public class PlaceCityTileEffect extends Effect {
     @Override
     public GameState[] apply(GameStateBuilder state, PlayerID currentPlayer) {
         Set<TileSlot> unplaced = new HashSet<>(state.getTileSlotsByType(TileSlotType.Desert));
@@ -28,5 +28,10 @@ public class PlaceCityTileEffect implements Effect {
         valid.toArray(results);
         if (results.length == 0) return new GameState[]{state.build()};
         return GameStateFunctions.triggerSearch(new TriggerType[]{TriggerType.CityPlaced}, results, currentPlayer);
+    }
+
+    @Override
+    public String getText() {
+        return "Place a city tile.";
     }
 }
