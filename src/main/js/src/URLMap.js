@@ -1,10 +1,13 @@
-import logo from './logo192.png'
+const logo = '/logo192.png'
+const plants = '/Plants-bonus.png'
+const steel = '/Steel-bonus.png'
+const titanium = '/Titanium-bonus.png'
 
 export default class URLMap {
   static mapTag(tag) {
     switch (tag) {
       case 'Plants':
-        return logo
+        return plants
       case 'Space':
         return logo
       case 'Score':
@@ -19,11 +22,11 @@ export default class URLMap {
       case 'mc':
         return logo
       case 'steel':
-        return logo
+        return steel
       case 'titanium':
-        return logo
+        return titanium
       case 'plants':
-        return logo
+        return plants
       case 'energy':
         return logo
       case 'heat':
