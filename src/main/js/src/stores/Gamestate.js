@@ -1,9 +1,9 @@
-import {Actions} from './Actions'
-import {fetchJson, stateActionMap, handleAction, handleActions} from './Utility'
+import { Actions } from './Actions'
+import { fetchJson, stateActionMap, handleAction, handleActions } from './Utility'
 
 const defaultBoard = {
   loading: false,
-  gamestate: []
+  gamestate: {board: undefined}
 }
 
 export const boardReducer = stateActionMap({
@@ -13,10 +13,10 @@ export const boardReducer = stateActionMap({
     [Actions.FETCH_GAME_STATE_FAILURE]: () => false
   }, defaultBoard.loading),
 
-  gamestate: handleAction(Actions.FETCH_GAME_STATE_SUCCESS, (_state, {gamestate}) => gamestate, defaultBoard.gamestate),
+  gamestate: handleAction(Actions.FETCH_GAME_STATE_SUCCESS, (_state, { gamestate }) => gamestate, defaultBoard.gamestate),
 })
 
-export const fetchBoardSuccess = gamestate => ({type: Actions.FETCH_GAME_STATE_SUCCESS, gamestate: gamestate})
+export const fetchBoardSuccess = gamestate => ({ type: Actions.FETCH_GAME_STATE_SUCCESS, gamestate: gamestate })
 
 const exCard1 = {
   name: "Test card with a long name",
@@ -61,12 +61,13 @@ const exCard5 = {
 
 const exPlayers = [{
   resources: {
-    mc: {amount: 20, production: -3},
-    steel: {amount: 0, production: 2},
-    titanium: {amount: 1, production: 0},
-    plants: {amount: 3, production: 0},
-    energy: {amount: 3, production: 3},
-    heat: {amount: 16, production: 7}},
+    mc: { amount: 20, production: -3 },
+    steel: { amount: 0, production: 2 },
+    titanium: { amount: 1, production: 0 },
+    plants: { amount: 3, production: 0 },
+    energy: { amount: 3, production: 3 },
+    heat: { amount: 16, production: 7 }
+  },
   score: 27,
   tableau: [exCard1, exCard2],
   hand: [exCard3, exCard4, exCard5]
@@ -74,9 +75,9 @@ const exPlayers = [{
 
 export const fetchBoard = (dispatch) => {
   fetchJson('/greeting').then(result => dispatch(fetchBoardSuccess(
-      {
-        players: exPlayers,
-        active: 0,
-        board: result
-      })))
+    {
+      players: exPlayers,
+      active: 0,
+      board: result
+    })))
 }

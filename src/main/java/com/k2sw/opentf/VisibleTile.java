@@ -7,23 +7,23 @@ public class VisibleTile {
     private TileSlotType tileSlotType;
     private ResourceBonus[] bonuses;
     private Tile tile;
-    private int row;
-    private int col;
+    private int q;
+    private int r;
 
-    public int getRow() {
-        return row;
+    public int getQ() {
+        return q;
     }
 
-    public int getCol() {
-        return col;
+    public int getR() {
+        return r;
     }
 
-    public VisibleTile(TileSlotType tileSlotType, ResourceBonus[] bonuses, Tile tile, int row, int col) {
+    public VisibleTile(TileSlotType tileSlotType, ResourceBonus[] bonuses, Tile tile, int q, int r) {
         this.tileSlotType = tileSlotType;
         this.bonuses = bonuses;
         this.tile = tile;
-        this.row = row;
-        this.col = col;
+        this.q = q;
+        this.r = r;
     }
 
     public TileSlotType getTileSlotType() {

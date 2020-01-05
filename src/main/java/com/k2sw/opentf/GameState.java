@@ -127,12 +127,14 @@ public class GameState {
     }
 
     public VisibleTile[][] getVisible() {
+        int[] startQ = {0, -1, -2, -3, -4, -4, -4, -4, -4};
+
         VisibleTile[][] result = new VisibleTile[standardBoard.getHeight()][];
         for (int i=0; i < standardBoard.getHeight(); i++) {
             result[i] = new VisibleTile[standardBoard.getWidth(i)];
             for (int j=0; j < standardBoard.getWidth(i); j++) {
                 TileSlot slot = standardBoard.at(i, j);
-                result[i][j] = new VisibleTile(slot.getTileSlotType(), slot.getBonuses(), placedTiles.getOrDefault(slot, null), i, j);
+                result[i][j] = new VisibleTile(slot.getTileSlotType(), slot.getBonuses(), placedTiles.getOrDefault(slot, null), startQ[i] + j, i - 4);
             }
         }
         return result;
